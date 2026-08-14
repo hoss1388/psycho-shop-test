@@ -1,0 +1,37 @@
+{
+  "updatedAt": null,
+  "sources": {
+    "premium": "https://api.fragment-api.io/api/prices",
+    "premiumPriceList": "https://api.fragment-api.io/api/prices/list",
+    "tonToToman": "https://api.bitpin.org/api/v1/mkt/tickers/ (GRAM_IRT)"
+  },
+  "health": {
+    "status": "not_ready",
+    "lastSuccessfulUpdate": null,
+    "fragment": {
+      "status": "not_ready"
+    },
+    "tonToToman": {
+      "status": "not_ready",
+      "provider": "Bitpin",
+      "market": "GRAM_IRT",
+      "fetchedAt": null
+    }
+  },
+  "tonToToman": null,
+  "stars": {
+    "tonPerStar": null
+  },
+  "premium": {
+    "single": {
+      "3m": null,
+      "6m": null,
+      "12m": null
+    },
+    "four": {
+      "3m": null,
+      "6m": null,
+      "12m": null
+    }
+  }
+}
