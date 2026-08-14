@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Gifts | Psycho Shop</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #090909;
+            color: #fff;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, #ff6a0018, transparent 70%);
+            right: -250px;
+            top: -250px;
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, #ff8a0010, transparent 70%);
+            left: -200px;
+            bottom: -250px;
+            z-index: -2;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .container {
+            width: 1200px;
+            max-width: 92%;
+            margin: auto;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            background: rgba(8, 8, 8, 0.65);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 120, 0, 0.12);
+        }
+
+        .nav-wrap {
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-mark {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ff6a00, #ff9d00);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: 900;
+            color: #111;
+            box-shadow: 0 0 25px rgba(255, 120, 0, 0.5);
+        }
+
+        .logo-mark i {
+            font-size: 28px;
+            color: #111;
+        }
+
+        .logo-text b {
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        .logo-text span {
+            font-size: 11px;
+            letter-spacing: 5px;
+            color: #ff8a00;
+            margin-top: 5px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        nav ul li a {
+            color: #ddd;
+            transition: 0.3s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        nav ul li a i {
+            font-size: 16px;
+            color: #ff8a00;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: #ff8a00;
+            background: rgba(255, 120, 0, 0.08);
+        }
+
+        .btn {
+            padding: 13px 28px;
+            border-radius: 50px;
+            transition: 0.35s;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+.btn-outline {
+            border: 2px solid #ff7a00;
+            background: transparent;
+            color: #fff;
+        }
+
+        .btn-outline:hover {
+            background: #ff7a00;
+            color: #111;
+            transform: translateY(-2px);
+        }
+
+        .btn-solid {
+            background: linear-gradient(135deg, #ff6a00, #ff9d00);
+            color: #111;
+            box-shadow: 0 0 35px rgba(255, 120, 0, 0.45);
+        }
+
+        .btn-solid:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 55px rgba(255, 120, 0, 0.65);
+        }
+
+        .btn-lg {
+            padding: 18px 34px;
+            font-size: 16px;
+        }
+
+        /* ===== SERVICES HERO ===== */
+        .services-hero {
+            padding: 170px 0 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .services-hero::before {
+            content: "";
+            position: absolute;
+            top: -280px;
+            right: -220px;
+            width: 850px;
+            height: 850px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 120, 0, 0.18), transparent 70%);
+            filter: blur(20px);
+            pointer-events: none;
+        }
+
+        .services-hero::after {
+            content: "";
+            position: absolute;
+            left: -220px;
+            bottom: -280px;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 120, 0, 0.12), transparent 70%);
+            filter: blur(25px);
+            pointer-events: none;
+        }
+
+        .services-header {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 950px;
+            margin: auto;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border: 1px solid rgba(255, 140, 0, 0.25);
+            background: rgba(255, 140, 0, 0.08);
+            border-radius: 50px;
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: #ff8a00;
+            margin-bottom: 25px;
+        }
+
+        .eyebrow i {
+            font-size: 14px;
+        }
+
+        .services-title {
+            font-size: 86px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .services-title span {
+            display: block;
+            margin-top: 10px;
+            background: linear-gradient(90deg, #ff6900, #ffb347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .services-text {
+            max-width: 720px;
+            margin: 35px auto;
+            font-size: 18px;
+            line-height: 2.2;
+            color: #bdbdbd;
+        }
+
+        .services-divider {
+            width: 170px;
+            height: 6px;
+            border-radius: 30px;
+            margin: 45px auto 0;
+            background: linear-gradient(90deg, #ff6900, #ffb347);
+            box-shadow: 0 0 15px rgba(255, 120, 0, 0.4), 0 0 35px rgba(255, 120, 0, 0.25);
+        }
+
+        /* ===== SECTION ===== */
+        .block {
+            padding: 60px 0 120px;
+        }
+
+        /* ===== SERVICE CARDS ===== */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 140, 0, 0.12);
+            border-radius: 28px;
+            padding: 35px 25px;
+            text-align: center;
+            transition: 0.45s;
+            backdrop-filter: blur(18px);
+            animation: cardFade 0.6s ease forwards;
+            opacity: 0;
+        }
+.service-card:nth-child(1) { animation-delay: 0.05s; }
+        .service-card:nth-child(2) { animation-delay: 0.08s; }
+        .service-card:nth-child(3) { animation-delay: 0.11s; }
+        .service-card:nth-child(4) { animation-delay: 0.14s; }
+        .service-card:nth-child(5) { animation-delay: 0.17s; }
+        .service-card:nth-child(6) { animation-delay: 0.20s; }
+        .service-card:nth-child(7) { animation-delay: 0.23s; }
+        .service-card:nth-child(8) { animation-delay: 0.26s; }
+        .service-card:nth-child(9) { animation-delay: 0.29s; }
+        .service-card:nth-child(10) { animation-delay: 0.32s; }
+        .service-card:nth-child(11) { animation-delay: 0.35s; }
+
+        @keyframes cardFade {
+            from {
+                opacity: 0;
+                transform: translateY(45px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .service-card:hover {
+            transform: translateY(-14px);
+            border-color: #ff8a00;
+            box-shadow: 0 18px 45px rgba(255, 120, 0, 0.18), 0 0 35px rgba(255, 120, 0, 0.12);
+        }
+
+        .service-card:hover h3 {
+            color: #ffb347;
+            transition: 0.35s;
+        }
+
+        .service-card:hover p {
+            color: #e8e8e8;
+            transition: 0.35s;
+        }
+
+        .service-card:hover .service-icon {
+            transform: rotate(-8deg) scale(1.08);
+        }
+
+        .service-icon {
+            width: 90px;
+            height: 90px;
+            margin: auto;
+            margin-bottom: 25px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #ff6900, #ffb347);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 15px 35px rgba(255, 120, 0, 0.35);
+            transition: 0.4s;
+        }
+
+        .service-icon i {
+            font-size: 42px;
+            color: #111;
+        }
+
+        .service-card h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .service-price {
+            font-size: 26px;
+            font-weight: 900;
+            color: #ff9800;
+            margin: 12px 0 18px;
+        }
+
+        .service-card .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 14px 20px;
+            font-size: 15px;
+        }
+
+        .service-card .btn-solid:hover {
+            transform: translateY(-3px);
+        }
+
+        /* ===== BACK BUTTON ===== */
+        .back-wrap {
+            margin-top: 70px;
+            text-align: center;
+        }
+
+        .back-wrap .btn {
+            gap: 12px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 40px 0 30px;
+            background: #070707;
+            border-top: 1px solid rgba(255, 120, 0, 0.12);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.03;
+            pointer-events: none;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* ================================================================
+                   RESPONSIVE
+                ================================================================ */
+
+        @media (max-width: 992px) {
+            .nav-wrap {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+                gap: 20px;
+            }
+nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .services-title {
+                font-size: 60px;
+            }
+
+            .service-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 94%;
+                max-width: 94%;
+            }
+
+            .nav-wrap {
+                padding: 12px 0;
+                gap: 12px;
+            }
+
+            .logo {
+                transform: scale(0.9);
+            }
+
+            nav ul {
+                gap: 4px;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 140, 0, 0.15);
+                padding: 8px 10px;
+                border-radius: 16px;
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            nav ul li a {
+                font-size: 11px;
+                padding: 4px 7px;
+                gap: 3px;
+            }
+
+            nav ul li a i {
+                font-size: 12px;
+            }
+
+            header .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+                border-radius: 12px;
+                font-size: 14px;
+            }
+
+            .services-hero {
+                padding: 190px 0 50px;
+            }
+
+            .services-title {
+                font-size: 42px;
+                letter-spacing: 0;
+            }
+
+            .services-title span {
+                margin-top: 5px;
+            }
+
+            .services-text {
+                font-size: 15px;
+                line-height: 2;
+                margin: 20px auto;
+            }
+
+            .services-divider {
+                width: 120px;
+                height: 4px;
+                margin-top: 25px;
+            }
+
+            .eyebrow {
+                font-size: 11px;
+                padding: 8px 14px;
+                letter-spacing: 1px;
+            }
+
+            .block {
+                padding: 30px 0 60px;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+                margin-top: 25px;
+            }
+
+            .service-card {
+                padding: 22px 14px;
+                border-radius: 18px;
+            }
+
+            .service-card h3 {
+                font-size: 17px;
+            }
+
+            .service-price {
+                font-size: 18px;
+                margin: 8px 0 12px;
+            }
+
+            .service-icon {
+                width: 60px;
+                height: 60px;
+                border-radius: 16px;
+                margin-bottom: 16px;
+            }
+
+            .service-icon i {
+                font-size: 28px;
+            }
+
+            .service-card .btn {
+                padding: 10px 12px;
+                font-size: 12px;
+                border-radius: 30px;
+            }
+
+            .back-wrap {
+                margin-top: 40px;
+            }
+
+            .back-wrap .btn {
+                width: 100%;
+                justify-content: center;
+                font-size: 14px;
+                padding: 14px 20px;
+            }
+
+            footer {
+                padding: 25px 0 15px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .service-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .service-card {
+                padding: 18px 10px;
+                border-radius: 14px;
+            }
+.service-card h3 {
+                font-size: 14px;
+            }
+
+            .service-price {
+                font-size: 15px;
+            }
+
+            .service-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                margin-bottom: 12px;
+            }
+
+            .service-icon i {
+                font-size: 22px;
+            }
+
+            .service-card .btn {
+                padding: 8px 10px;
+                font-size: 11px;
+                gap: 5px;
+            }
+
+            .services-title {
+                font-size: 34px;
+            }
+
+            nav ul li a {
+                font-size: 10px;
+                padding: 3px 5px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .service-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .service-card {
+                padding: 14px 8px;
+            }
+
+            .service-card h3 {
+                font-size: 13px;
+            }
+
+            .service-price {
+                font-size: 13px;
+            }
+
+            .service-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                margin-bottom: 10px;
+            }
+
+            .service-icon i {
+                font-size: 18px;
+            }
+
+            .service-card .btn {
+                padding: 6px 8px;
+                font-size: 10px;
+            }
+        }
+    
+        /* ===== Cart qty-stepper (Added) ===== */
+        .qty-box {
+            margin: 18px 0;
+            text-align: center;
+        }
+        .qty-label {
+            display: block;
+            font-size: 13px;
+            color: #bdbdbd;
+            margin-bottom: 10px;
+        }
+        .qty-stepper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .qty-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 140, 0, 0.35);
+            background: #161616;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .qty-btn:hover {
+            background: #ff7a00;
+            color: #111;
+        }
+        .qty-input {
+            width: 70px;
+            text-align: center;
+            padding: 9px 8px;
+            border-radius: 10px;
+            background: #111;
+            color: #fff;
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 15px;
+            outline: none;
+        }
+        .qty-input:focus {
+            border-color: #ff8a00;
+        }
+</style>
+
+</head>
+
+<body>
+
+    <div class="noise"></div>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="container nav-wrap">
+            <div class="logo">
+                <div class="logo-mark"><i class="fa-solid fa-bolt"></i></div>
+                <div class="logo-text">
+                    <b>PSYCHO</b>
+                    <span>SHOP</span>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html"><i class="fa-solid fa-home"></i> صفحه اصلی</a></li>
+                    <li><a href="services.html"><i class="fa-solid fa-box"></i> محصولات</a></li>
+                    <li><a href="gift.html"><i class="fa-solid fa-gift"></i> گیفت</a></li>
+                    <li><a href="gift-stars.html" class="active"><i class="fa-solid fa-star"></i> گیفت استارزی</a></li>
+                </ul>
+            </nav>
+            <a class="btn btn-outline" href="https://t.me/psycho_supp" target="_blank">
+                <i class="fa-brands fa-telegram"></i> پشتیبانی
+            </a>
+        </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="services-hero">
+        <div class="container services-header">
+            <div class="eyebrow"><i class="fa-solid fa-star"></i> STAR GIFTS</div>
+            <h1 class="services-title"><span>گیفت استارزی</span></h1>
+            <p class="services-text">گیفت مورد نظر خود را انتخاب کنید.</p>
+            <div class="services-divider"></div>
+        </div>
+    </section>
+
+    <!-- ===== GIFTS ===== -->
+    <section class="block">
+        <div class="container">
+            <div class="service-grid">
+
+                <!-- Teddy -->
+                <div class="service-card" data-price="50000" data-unit="1" data-request="gift">
+                    <div class="service-icon"><i class="fa-solid fa-paw"></i></div>
+                    <h3>Teddy Gift</h3>
+                    <div class="service-price">50,000 تومان</div>
+<div class="qty-box">
+<span class="qty-label">تعداد:</span>
+<div class="qty-stepper">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,-1)">−</button>
+<input type="number" class="qty-input" value="1" min="1">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,1)">+</button>
+</div>
+</div>
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+</div>
+
+                <!-- Heart -->
+                <div class="service-card" data-price="50000" data-unit="1" data-request="gift">
+                    <div class="service-icon"><i class="fa-solid fa-heart"></i></div>
+                    <h3>Heart Gift</h3>
+                    <div class="service-price">50,000 تومان</div>
+<div class="qty-box">
+<span class="qty-label">تعداد:</span>
+<div class="qty-stepper">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,-1)">−</button>
+<input type="number" class="qty-input" value="1" min="1">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,1)">+</button>
+</div>
+</div>
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+</div>
+
+                <!-- Rose -->
+                <div class="service-card" data-price="82000" data-unit="1" data-request="gift">
+                    <div class="service-icon"><i class="fa-solid fa-seedling"></i></div>
+                    <h3>Rose Gift</h3>
+                    <div class="service-price">82,000 تومان</div>
+<div class="qty-box">
+<span class="qty-label">تعداد:</span>
+<div class="qty-stepper">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,-1)">−</button>
+<input type="number" class="qty-input" value="1" min="1">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,1)">+</button>
+</div>
+</div>
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+</div>
+
+                <!-- Gift Box -->
+                <div class="service-card" data-price="82000" data-unit="1" data-request="gift">
+                    <div class="service-icon"><i class="fa-solid fa-gift"></i></div>
+                    <h3>Gift Box</h3>
+                    <div class="service-price">82,000 تومان</div>
+<div class="qty-box">
+<span class="qty-label">تعداد:</span>
+<div class="qty-stepper">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,-1)">−</button>
+<input type="number" class="qty-input" value="1" min="1">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,1)">+</button>
+</div>
+</div>
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+</div>
+
+                <!-- Cake -->
+                <div class="service-card" data-price="165000" data-unit="1" data-request="gift">
+                    <div class="service-icon"><i class="fa-solid fa-cake-candles"></i></div>
+                    <h3>Cake Gift</h3>
+                    <div class="service-price">165,000 تومان</div>
+<div class="qty-box">
+<span class="qty-label">تعداد:</span>
+<div class="qty-stepper">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,-1)">−</button>
+<input type="number" class="qty-input" value="1" min="1">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,1)">+</button>
+</div>
+</div>
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+</div>
+
+                <!-- Bouquet -->
+                <div class="service-card" data-price="165000" data-unit="1" data-request="gift">
+                    <div class="service-icon"><i class="fa-solid fa-spa"></i></div>
+                    <h3>Bouquet Gift</h3>
+                    <div class="service-price">165,000 تومان</div>
+<div class="qty-box">
+<span class="qty-label">تعداد:</span>
+<div class="qty-stepper">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,-1)">−</button>
+<input type="number" class="qty-input" value="1" min="1">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,1)">+</button>
+</div>
+</div>
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+</div>
+
+                <!-- Champagne -->
+                <div class="service-card" data-price="165000" data-unit="1" data-request="gift">
+                    <div class="service-icon"><i class="fa-solid fa-champagne-glasses"></i></div>
+                    <h3>Champagne Gift</h3>
+                    <div class="service-price">165,000 تومان</div>
+<div class="qty-box">
+<span class="qty-label">تعداد:</span>
+<div class="qty-stepper">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,-1)">−</button>
+<input type="number" class="qty-input" value="1" min="1">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,1)">+</button>
+</div>
+</div>
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+</div>
+
+                <!-- Rocket -->
+                <div class="service-card" data-price="165000" data-unit="1" data-request="gift">
+                    <div class="service-icon"><i class="fa-solid fa-rocket"></i></div>
+                    <h3>Rocket Gift</h3>
+                    <div class="service-price">165,000 تومان</div>
+<div class="qty-box">
+<span class="qty-label">تعداد:</span>
+<div class="qty-stepper">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,-1)">−</button>
+<input type="number" class="qty-input" value="1" min="1">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,1)">+</button>
+</div>
+</div>
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+</div>
+
+                <!-- Diamond -->
+                <div class="service-card" data-price="305000" data-unit="1" data-request="gift">
+                    <div class="service-icon"><i class="fa-solid fa-gem"></i></div>
+                    <h3>Diamond Gift</h3>
+                    <div class="service-price">305,000 تومان</div>
+<div class="qty-box">
+<span class="qty-label">تعداد:</span>
+<div class="qty-stepper">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,-1)">−</button>
+<input type="number" class="qty-input" value="1" min="1">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,1)">+</button>
+</div>
+</div>
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+</div>
+
+                <!-- Ring -->
+                <div class="service-card" data-price="305000" data-unit="1" data-request="gift">
+                    <div class="service-icon"><i class="fa-solid fa-ring"></i></div>
+                    <h3>Ring Gift</h3>
+                    <div class="service-price">305,000 تومان</div>
+<div class="qty-box">
+<span class="qty-label">تعداد:</span>
+<div class="qty-stepper">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,-1)">−</button>
+<input type="number" class="qty-input" value="1" min="1">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,1)">+</button>
+</div>
+</div>
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+</div>
+<!-- Trophy -->
+                <div class="service-card" data-price="305000" data-unit="1" data-request="gift">
+                    <div class="service-icon"><i class="fa-solid fa-trophy"></i></div>
+                    <h3>Trophy Gift</h3>
+                    <div class="service-price">305,000 تومان</div>
+<div class="qty-box">
+<span class="qty-label">تعداد:</span>
+<div class="qty-stepper">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,-1)">−</button>
+<input type="number" class="qty-input" value="1" min="1">
+<button type="button" class="qty-btn" onclick="psychoQtyStep(this,1)">+</button>
+</div>
+</div>
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+</div>
+
+            </div>
+
+            <!-- Back -->
+            <div class="back-wrap">
+                <a href="gift.html" class="btn btn-outline btn-lg">
+                    <i class="fa-solid fa-arrow-right"></i> بازگشت به گیفت‌ها
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <span>© 2026 Psycho Shop</span>
+                <span>Designed By <i class="fa-solid fa-bolt" style="color:#ff8a00;"></i> Psycho Shop</span>
+            </div>
+        </div>
+    </footer>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

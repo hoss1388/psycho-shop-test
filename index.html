@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psycho Shop | محصولات تلگرام</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- ====== CSS اختصاصی صفحه اصلی ====== -->
+    <style>
+        /* ========================================
+                   RESET & BASE
+                ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #090909;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, #ff6a0018, transparent 70%);
+            right: -250px;
+            top: -250px;
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, #ff8a0010, transparent 70%);
+            left: -200px;
+            bottom: -250px;
+            z-index: -2;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .container {
+            width: 1200px;
+            max-width: 95%;
+            margin: auto;
+        }
+
+        /* ========================================
+                   HEADER
+                ======================================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            background: rgba(8, 8, 8, 0.65);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 120, 0, 0.12);
+            transition: 0.3s;
+        }
+
+        .nav-wrap {
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-mark {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ff6a00, #ff9d00);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: 900;
+            color: #111;
+            box-shadow: 0 0 25px rgba(255, 120, 0, 0.5);
+        }
+
+        .logo-mark i {
+            font-size: 28px;
+            color: #111;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .logo-text b {
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        .logo-text span {
+            font-size: 11px;
+            letter-spacing: 5px;
+            color: #ff8a00;
+            margin-top: 5px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        nav ul li a {
+            color: #ddd;
+            transition: 0.3s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        nav ul li a i {
+            font-size: 16px;
+            color: #ff8a00;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: #ff8a00;
+            background: rgba(255, 120, 0, 0.08);
+        }
+.btn {
+            padding: 13px 28px;
+            border-radius: 50px;
+            transition: 0.35s;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            border: 2px solid #ff7a00;
+            background: transparent;
+            color: #fff;
+        }
+
+        .btn-outline:hover {
+            background: #ff7a00;
+            color: #111;
+            transform: translateY(-2px);
+        }
+
+        .btn-solid {
+            background: linear-gradient(135deg, #ff6a00, #ff9d00);
+            color: #111;
+            box-shadow: 0 0 35px rgba(255, 120, 0, 0.45);
+        }
+
+        .btn-solid:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 55px rgba(255, 120, 0, 0.65);
+        }
+
+        .btn-lg {
+            padding: 18px 34px;
+            font-size: 16px;
+        }
+
+        /* ========================================
+                   HERO
+                ======================================== */
+        .hero {
+            padding-top: 170px;
+            padding-bottom: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: center;
+            gap: 70px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border: 1px solid rgba(255, 140, 0, 0.25);
+            background: rgba(255, 140, 0, 0.08);
+            border-radius: 50px;
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: #ff8a00;
+            margin-bottom: 25px;
+        }
+
+        .eyebrow i {
+            font-size: 14px;
+        }
+
+        .title {
+            font-size: 78px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .line2 {
+            display: block;
+            background: linear-gradient(90deg, #ff6a00, #ffbf47);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sub {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f5f5f5;
+            margin-bottom: 25px;
+        }
+
+        .desc {
+            color: #b8b8b8;
+            font-size: 17px;
+            line-height: 2;
+            max-width: 620px;
+            margin-bottom: 40px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .scroll-hint {
+            margin-top: 55px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ff8a00;
+            font-weight: 700;
+        }
+
+        .scroll-hint i {
+            animation: down 1.8s infinite;
+        }
+
+        @keyframes down {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(8px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .ring {
+            width: 460px;
+            height: 460px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 140, 0, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 0 80px rgba(255, 120, 0, 0.15), inset 0 0 80px rgba(255, 120, 0, 0.12);
+            animation: spin 20s linear infinite;
+        }
+.mark-big {
+            font-size: 190px;
+            font-weight: 900;
+            background: linear-gradient(#ffb347, #ff6a00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(255, 120, 0, 0.6));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .pedestal {
+            position: absolute;
+            bottom: -18px;
+            width: 240px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(255, 120, 0, 0.35), transparent);
+            filter: blur(10px);
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-12px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* ========================================
+                   FEATURES
+                ======================================== */
+        .features-inner {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+            margin-bottom: 110px;
+        }
+
+        .feature {
+            background: #111;
+            border: 1px solid rgba(255, 120, 0, 0.12);
+            border-radius: 22px;
+            padding: 35px;
+            text-align: center;
+            transition: 0.35s;
+        }
+
+        .feature:hover {
+            transform: translateY(-12px);
+            border-color: #ff7a00;
+            box-shadow: 0 0 40px rgba(255, 120, 0, 0.15);
+        }
+
+        .feature i {
+            font-size: 34px;
+            color: #ff8a00;
+            margin-bottom: 20px;
+        }
+
+        .feature h4 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .feature p {
+            color: #bcbcbc;
+            line-height: 1.8;
+        }
+
+        /* ========================================
+                   ABOUT
+                ======================================== */
+        .block {
+            padding: 120px 0;
+        }
+
+        .about-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .about-panel {
+            background: #111;
+            border-radius: 25px;
+            padding: 45px;
+            border: 1px solid rgba(255, 120, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-panel-glow {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, #ff6a0020, transparent);
+            left: -120px;
+            top: -120px;
+        }
+
+        .about-badge {
+            width: 75px;
+            height: 75px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #ff6a00, #ff9d00);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            color: #111;
+            margin-bottom: 30px;
+        }
+
+        .about-badge i {
+            font-size: 30px;
+            color: #111;
+        }
+
+        .about-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-list li {
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .about-list i {
+            color: #ff8a00;
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 45px;
+            margin-top: 40px;
+        }
+
+        .stat b {
+            display: block;
+            font-size: 38px;
+            color: #ff8a00;
+        }
+.stat span {
+            color: #aaa;
+        }
+
+        /* ========================================
+                   CTA
+                ======================================== */
+        .cta {
+            background: #111;
+            border-radius: 30px;
+            padding: 70px;
+            text-align: center;
+            border: 1px solid rgba(255, 120, 0, 0.15);
+        }
+
+        .cta h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            color: #bdbdbd;
+            margin-bottom: 35px;
+            line-height: 2;
+        }
+
+        /* ========================================
+                   FOOTER
+                ======================================== */
+        footer {
+            margin-top: 120px;
+            padding: 70px 0 30px;
+            background: #070707;
+            border-top: 1px solid rgba(255, 120, 0, 0.12);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr 1fr;
+            gap: 60px;
+        }
+
+        .footer-desc {
+            margin-top: 20px;
+            line-height: 2;
+            color: #999;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .footer-social a {
+            width: 45px;
+            height: 45px;
+            background: #111;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .footer-social a:hover {
+            background: #ff7a00;
+            transform: translateY(-4px);
+        }
+
+        .footer-col h5 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 15px;
+        }
+
+        .footer-col a {
+            color: #bdbdbd;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-col a i {
+            font-size: 12px;
+            color: #ff8a00;
+        }
+
+        .footer-col a:hover {
+            color: #ff8a00;
+            transform: translateX(-4px);
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .contact-item i {
+            color: #ff8a00;
+            font-size: 22px;
+            margin-top: 4px;
+        }
+
+        .contact-item span {
+            color: #999;
+            font-size: 13px;
+        }
+
+        .contact-item b {
+            color: #fff;
+            display: block;
+        }
+
+        .footer-bottom {
+            margin-top: 60px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* ========================================
+                   RESPONSIVE - DESKTOP & TABLET
+                ======================================== */
+        @media (max-width: 992px) {
+            .hero-grid,
+            .about-wrap,
+            .footer-grid,
+            .features-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .title {
+                font-size: 56px;
+            }
+
+            .hero {
+                padding-top: 150px;
+            }
+
+            .nav-wrap {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+
+            .ring {
+                width: 300px;
+                height: 300px;
+            }
+.mark-big {
+                font-size: 120px;
+            }
+        }
+
+        /* ========================================
+                   RESPONSIVE - MOBILE
+                ======================================== */
+        @media (max-width: 600px) {
+            .container {
+                width: 92%;
+                max-width: 92%;
+            }
+
+            .nav-wrap {
+                padding: 15px 0;
+                gap: 15px;
+            }
+
+            .logo {
+                transform: scale(0.95);
+            }
+
+            nav ul {
+                gap: 10px;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 140, 0, 0.15);
+                padding: 10px 12px;
+                border-radius: 20px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            nav ul li a {
+                font-size: 13px;
+                padding: 6px 10px;
+            }
+
+            header .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 12px;
+                border-radius: 14px;
+            }
+
+            .hero {
+                padding-top: 220px;
+                padding-bottom: 60px;
+            }
+
+            .hero-grid {
+                gap: 30px;
+            }
+
+            .title {
+                font-size: 42px;
+            }
+
+            .sub {
+                font-size: 18px;
+            }
+
+            .desc {
+                font-size: 15px;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .features-inner {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                margin-bottom: 60px;
+            }
+
+            .feature {
+                padding: 25px 20px;
+            }
+
+            .block {
+                padding: 60px 0;
+            }
+
+            .about-wrap {
+                gap: 30px;
+            }
+
+            .about-panel {
+                padding: 30px 20px;
+            }
+
+            .stat-row {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .cta {
+                padding: 35px 20px;
+            }
+
+            .cta h2 {
+                font-size: 28px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            footer {
+                margin-top: 60px;
+                padding: 40px 0 20px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+                margin-top: 40px;
+            }
+
+            .btn-lg {
+                padding: 14px 24px;
+                font-size: 14px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .scroll-hint {
+                margin-top: 30px;
+                justify-content: center;
+            }
+        }
+
+        /* ========================================
+                   ANIMATIONS
+                ======================================== */
+        .fade-up {
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        .d1 {
+            animation-delay: 0.1s;
+        }
+        .d2 {
+            animation-delay: 0.2s;
+        }
+        .d3 {
+            animation-delay: 0.35s;
+        }
+        .d4 {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+transform: translateY(0);
+            }
+        }
+
+        .feature {
+            animation: cardFade 0.6s ease forwards;
+            opacity: 0;
+        }
+        .feature:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+        .feature:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        .feature:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+        .feature:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes cardFade {
+            from {
+                opacity: 0;
+                transform: translateY(35px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ========================================
+                   NOISE EFFECT
+                ======================================== */
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.03;
+            pointer-events: none;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="noise"></div>
+
+    <!-- ========== HEADER ========== -->
+    <header>
+        <div class="container nav-wrap">
+            <div class="logo">
+                <div class="logo-mark">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div class="logo-text">
+                    <b>PSYCHO</b>
+                    <span>SHOP</span>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="active"><i class="fa-solid fa-home"></i> صفحه اصلی</a></li>
+                    <li><a href="#about"><i class="fa-solid fa-info-circle"></i> درباره ما</a></li>
+                    <li><a href="#contact"><i class="fa-solid fa-headset"></i> تماس با ما</a></li>
+                </ul>
+            </nav>
+            <a class="btn btn-outline" href="https://t.me/psycho_supp" target="_blank">
+                <i class="fa-brands fa-telegram"></i>
+                پشتیبانی
+            </a> 
+            <a href="cart.html" class="btn btn-outline cart-button">
+    <i class="fa-solid fa-cart-shopping"></i>
+    سبد خرید
+    <span id="cart-count"></span>
+</a>
+        </div>
+    </header>
+
+    <!-- ========== HERO ========== -->
+    <section class="hero" id="home">
+        <div class="container hero-grid">
+            <div>
+                <div class="eyebrow fade-up">
+                    <i class="fa-solid fa-star"></i> WELCOME TO
+                </div>
+                <h1 class="title fade-up d1">
+                    PSYCHO
+                    <span class="line2">SHOP</span>
+                </h1>
+                <div class="sub fade-up d2">
+                    محصولات تلگرام و خدمات دیجیتال
+                </div>
+                <p class="desc fade-up d2">
+                    ارائه دهنده انواع محصولات تلگرام، استارز، پریمیوم، شماره مجازی، گیفت، بوست و خدمات شبکه‌های اجتماعی با بهترین قیمت و پشتیبانی سریع.
+                </p>
+                <div class="hero-actions fade-up d3">
+                    <a href="services.html" class="btn btn-solid btn-lg">
+                        <i class="fa-solid fa-box"></i>
+                        مشاهده محصولات
+                    </a>
+                    <a href="https://t.me/psycho_supp" class="btn btn-outline btn-lg" target="_blank">
+                        <i class="fa-solid fa-headset"></i>
+                        پشتیبانی
+                    </a>
+                </div>
+                <div class="scroll-hint fade-up d4">
+                    <i class="fa-solid fa-chevron-down"></i>
+                 </div>
+            </div>
+            <div class="hero-visual fade-up d2">
+                <div class="ring">
+                    <div class="mark-big">P</div>
+                    <div class="pedestal"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FEATURES ========== -->
+    <div class="container">
+        <div class="features-inner">
+            <div class="feature">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h4>امنیت بالا</h4>
+                <p>تمامی سفارش‌ها با ضمانت انجام می‌شود.</p>
+            </div>
+            <div class="feature">
+                <i class="fa-solid fa-bolt"></i>
+                <h4>تحویل سریع</h4>
+                <p>تحویل سفارش‌ها در سریع‌ترین زمان.</p>
+            </div>
+            <div class="feature">
+                <i class="fa-solid fa-award"></i>
+                <h4>بهترین قیمت</h4>
+                <p>قیمت رقابتی برای تمامی خدمات.</p>
+            </div>
+            <div class="feature">
+                <i class="fa-solid fa-headset"></i>
+                <h4>پشتیبانی 24/7</h4>
+                <p>همیشه کنار شما هستیم.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ABOUT ========== -->
+    <section class="block" id="about">
+        <div class="container about-wrap">
+            <div class="about-panel">
+                <div class="about-panel-glow"></div>
+                <div class="about-badge">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <ul class="about-list">
+                    <li><i class="fa-solid fa-check-circle"></i> بیش از یک سال سابقه فعالیت</li>
+                    <li><i class="fa-solid fa-check-circle"></i> تحویل سریع بعد از پرداخت</li>
+                    <li><i class="fa-solid fa-check-circle"></i> پشتیبانی مستقیم در تلگرام</li>
+                    <li><i class="fa-solid fa-check-circle"></i> رضایت مشتری اولویت ماست</li>
+                </ul>
+            </div>
+            <div>
+                <div class="eyebrow">
+                    <i class="fa-solid fa-about"></i> درباره ما
+                </div>
+                <h2 style="font-size:clamp(30px,3vw,42px);font-weight:900;margin-bottom:20px;">
+                    Psycho Shop
+                </h2>
+                <p class="desc">
+                    Psycho Shop بیش از یک سال است که در زمینه فروش محصولات تلگرام و خدمات دیجیتال فعالیت می‌کند.
+                    هدف ما ارائه بهترین قیمت، تحویل سریع و پشتیبانی واقعی برای مشتریان است.
+                    تمام سفارش‌ها از طریق تلگرام انجام می‌شود تا ارتباط سریع‌تر و راحت‌تری با مشتریان داشته باشیم.
+                </p>
+                <div class="stat-row">
+                    <div class="stat">
+                        <b>+1</b>
+                        <span>سال فعالیت</span>
+                    </div>
+                    <div class="stat">
+                        <b>24/7</b>
+                        <span>پشتیبانی</span>
+                    </div>
+                    <div class="stat">
+                        <b>100%</b>
+                        <span>رضایت مشتری</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <section class="block" id="contact">
+        <div class="container">
+            <div class="cta">
+                <h2>
+                    <i class="fa-solid fa-headset" style="color:#ff8a00;"></i>
+                    ارتباط با پشتیبانی
+                </h2>
+                <p>
+                    برای خرید محصولات یا دریافت قیمت، از طریق تلگرام با ما در ارتباط باشید.
+                </p>
+                <a href="https://t.me/psycho_supp" target="_blank" class="btn btn-solid btn-lg">
+                    <i class="fa-brands fa-telegram"></i>
+                    @psycho_supp
+                </a>
+            </div>
+        </div>
+    </section>
+<!-- ========== FOOTER ========== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo">
+                        <div class="logo-mark">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <div class="logo-text">
+                            <b>PSYCHO</b>
+                            <span>SHOP</span>
+                        </div>
+                    </div>
+                    <p class="footer-desc">
+                        Psycho Shop مرجع فروش محصولات تلگرام، استارز، پریمیوم، شماره مجازی و خدمات دیجیتال با بهترین قیمت و پشتیبانی سریع.
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://t.me/psycho_supp" target="_blank">
+                            <i class="fa-brands fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h5>دسترسی سریع</h5>
+                    <ul>
+                        <li>
+                            <a href="#home">
+                                <i class="fa-solid fa-chevron-left"></i>
+                                صفحه اصلی
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#about">
+                                <i class="fa-solid fa-chevron-left"></i>
+                                درباره ما
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#contact">
+                                <i class="fa-solid fa-chevron-left"></i>
+                                تماس با ما
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>تماس با ما</h5>
+                    <div class="contact-item">
+                        <i class="fa-brands fa-telegram"></i>
+                        <div>
+                            <span>تلگرام</span>
+                            <a href="https://t.me/psycho_supp" target="_blank">
+                                <b>@psycho_supp</b>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-clock"></i>
+                        <div>
+                            <span>پشتیبانی</span>
+                            <b>24 ساعت شبانه روز</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Psycho Shop</span>
+                <span>Made with <i class="fa-solid fa-heart" style="color:#ff6a00;"></i> for Psycho Shop</span>
+            </div>
+        </div>
+    </footer>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

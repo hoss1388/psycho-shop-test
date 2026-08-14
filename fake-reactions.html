@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ری‌اکشن فیک | Psycho Shop</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #090909;
+            color: #fff;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, #ff6a0018, transparent 70%);
+            right: -250px;
+            top: -250px;
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, #ff8a0010, transparent 70%);
+            left: -200px;
+            bottom: -250px;
+            z-index: -2;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .container {
+            width: 1200px;
+            max-width: 92%;
+            margin: auto;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            background: rgba(8, 8, 8, 0.65);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 120, 0, 0.12);
+        }
+
+        .nav-wrap {
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-mark {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ff6a00, #ff9d00);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: 900;
+            color: #111;
+            box-shadow: 0 0 25px rgba(255, 120, 0, 0.5);
+        }
+
+        .logo-mark i {
+            font-size: 28px;
+            color: #111;
+        }
+
+        .logo-text b {
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        .logo-text span {
+            font-size: 11px;
+            letter-spacing: 5px;
+            color: #ff8a00;
+            margin-top: 5px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        nav ul li a {
+            color: #ddd;
+            transition: 0.3s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        nav ul li a i {
+            font-size: 16px;
+            color: #ff8a00;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: #ff8a00;
+            background: rgba(255, 120, 0, 0.08);
+        }
+
+        .btn {
+            padding: 13px 28px;
+            border-radius: 50px;
+            transition: 0.35s;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+.btn-outline {
+            border: 2px solid #ff7a00;
+            background: transparent;
+            color: #fff;
+        }
+
+        .btn-outline:hover {
+            background: #ff7a00;
+            color: #111;
+            transform: translateY(-2px);
+        }
+
+        .btn-solid {
+            background: linear-gradient(135deg, #ff6a00, #ff9d00);
+            color: #111;
+            box-shadow: 0 0 35px rgba(255, 120, 0, 0.45);
+        }
+
+        .btn-solid:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 55px rgba(255, 120, 0, 0.65);
+        }
+
+        .btn-lg {
+            padding: 18px 34px;
+            font-size: 16px;
+        }
+
+        /* ===== SERVICES HERO ===== */
+        .services-hero {
+            padding: 170px 0 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .services-hero::before {
+            content: "";
+            position: absolute;
+            top: -280px;
+            right: -220px;
+            width: 850px;
+            height: 850px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 120, 0, 0.18), transparent 70%);
+            filter: blur(20px);
+            pointer-events: none;
+        }
+
+        .services-hero::after {
+            content: "";
+            position: absolute;
+            left: -220px;
+            bottom: -280px;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 120, 0, 0.12), transparent 70%);
+            filter: blur(25px);
+            pointer-events: none;
+        }
+
+        .services-header {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 950px;
+            margin: auto;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border: 1px solid rgba(255, 140, 0, 0.25);
+            background: rgba(255, 140, 0, 0.08);
+            border-radius: 50px;
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: #ff8a00;
+            margin-bottom: 25px;
+        }
+
+        .services-title {
+            font-size: 86px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .services-title span {
+            display: block;
+            margin-top: 10px;
+            background: linear-gradient(90deg, #ff6900, #ffb347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .services-text {
+            max-width: 720px;
+            margin: 35px auto;
+            font-size: 18px;
+            line-height: 2.2;
+            color: #bdbdbd;
+        }
+
+        .services-divider {
+            width: 170px;
+            height: 6px;
+            border-radius: 30px;
+            margin: 45px auto 0;
+            background: linear-gradient(90deg, #ff6900, #ffb347);
+            box-shadow: 0 0 15px rgba(255, 120, 0, 0.4);
+        }
+
+        /* ===== SECTION ===== */
+        .block {
+            padding: 60px 0 120px;
+        }
+
+        .section-head {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-head h2 {
+            font-size: 42px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        /* ===== SELECT BOX ===== */
+        .virtual-price-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 35px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 140, 0, 0.15);
+            border-radius: 25px;
+            backdrop-filter: blur(18px);
+        }
+.virtual-price-box select {
+            width: 320px;
+            padding: 18px 25px;
+            border-radius: 50px;
+            background: #111;
+            color: white;
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 16px;
+            outline: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .virtual-price-box select:focus {
+            border-color: #ff8a00;
+            box-shadow: 0 0 25px rgba(255, 120, 0, 0.25);
+        }
+
+        .virtual-price-box select option {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        /* ===== RESULT CARDS ===== */
+        .country-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+            min-height: 100px;
+        }
+
+        .country-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 140, 0, 0.15);
+            border-radius: 25px;
+            padding: 35px 30px;
+            text-align: center;
+            backdrop-filter: blur(18px);
+            transition: 0.4s;
+            animation: countryFade 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .country-card:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+        .country-card:nth-child(2) {
+            animation-delay: 0.10s;
+        }
+        .country-card:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        @keyframes countryFade {
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .country-card:hover {
+            transform: translateY(-12px);
+            border-color: #ff8a00;
+            box-shadow: 0 15px 40px rgba(255, 120, 0, 0.2);
+        }
+
+        .country-card .icon-big {
+            font-size: 48px;
+            color: #ff8a00;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .country-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .country-card p {
+            color: #bdbdbd;
+            font-size: 17px;
+            line-height: 2;
+            margin-bottom: 25px;
+        }
+
+        .country-card p b {
+            color: #ff8a00;
+            font-size: 22px;
+        }
+
+        .country-card .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #777;
+            font-size: 18px;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            color: #ff8a00;
+            opacity: 0.3;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .back-wrap {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 40px 0 30px;
+            background: #070707;
+            border-top: 1px solid rgba(255, 120, 0, 0.12);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.03;
+            pointer-events: none;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+             /* ================================================================
+                   RESPONSIVE
+                ================================================================ */
+
+        /* ===== تبلت ===== */
+        @media (max-width: 992px) {
+            .nav-wrap {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .services-title {
+                font-size: 60px;
+            }
+
+            .virtual-price-box {
+                flex-direction: column;
+                padding: 25px 20px;
+            }
+
+            .virtual-price-box select {
+                width: 100%;
+            }
+
+            .virtual-price-box .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+        }
+
+        /* ===== موبایل ===== */
+        @media (max-width: 600px) {
+            .container {
+                width: 94%;
+                max-width: 94%;
+            }
+
+            /* Header */
+            .nav-wrap {
+                padding: 12px 0;
+                gap: 12px;
+            }
+
+            .logo {
+                transform: scale(0.9);
+            }
+
+            nav ul {
+                gap: 6px;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 140, 0, 0.15);
+                padding: 8px 10px;
+                border-radius: 16px;
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            nav ul li a {
+                font-size: 12px;
+                padding: 5px 8px;
+                gap: 4px;
+            }
+
+            nav ul li a i {
+                font-size: 13px;
+            }
+
+            header .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+                border-radius: 12px;
+                font-size: 14px;
+            }
+
+            /* Hero */
+            .services-hero {
+                padding: 190px 0 50px;
+            }
+
+            .services-title {
+                font-size: 42px;
+                letter-spacing: 0;
+            }
+
+            .services-title span {
+                margin-top: 5px;
+            }
+
+            .services-text {
+                font-size: 15px;
+                line-height: 2;
+                margin: 20px auto;
+            }
+
+            .services-divider {
+                width: 120px;
+                height: 4px;
+                margin-top: 25px;
+            }
+
+            .eyebrow {
+                font-size: 11px;
+                padding: 8px 14px;
+                letter-spacing: 1px;
+            }
+
+            /* Section */
+            .block {
+                padding: 30px 0 60px;
+            }
+
+            .section-head {
+                margin-bottom: 30px;
+            }
+
+            .section-head h2 {
+                font-size: 28px;
+            }
+
+            /* Select Box */
+            .virtual-price-box {
+                padding: 20px 15px;
+                gap: 15px;
+                border-radius: 18px;
+            }
+
+            .virtual-price-box select {
+                padding: 14px 18px;
+                font-size: 14px;
+                border-radius: 30px;
+            }
+
+            .virtual-price-box .btn {
+                font-size: 14px;
+                padding: 14px;
+                border-radius: 30px;
+            }
+
+            /* Result Cards */
+            .country-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+                margin-top: 30px;
+            }
+
+            .country-card {
+                padding: 25px 20px;
+                border-radius: 20px;
+            }
+            .country-card .icon-big {
+                font-size: 38px;
+            }
+
+            .country-card h3 {
+                font-size: 20px;
+            }
+
+            .country-card p {
+                font-size: 15px;
+            }
+
+            .country-card p b {
+                font-size: 19px;
+            }
+
+            .country-card .btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .empty-state {
+                padding: 40px 15px;
+                font-size: 16px;
+            }
+
+            .empty-state i {
+                font-size: 45px;
+            }
+
+            /* Back */
+            .back-wrap {
+                margin-top: 30px;
+            }
+
+            .back-wrap .btn {
+                width: 100%;
+                justify-content: center;
+                font-size: 14px;
+                padding: 14px 20px;
+            }
+
+            /* Footer */
+            footer {
+                padding: 25px 0 15px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+                font-size: 13px;
+            }
+        }
+
+        /* ===== موبایل خیلی کوچک ===== */
+        @media (max-width: 380px) {
+            .services-title {
+                font-size: 34px;
+            }
+
+            nav ul li a {
+                font-size: 11px;
+                padding: 4px 6px;
+            }
+
+            .country-card {
+                padding: 20px 15px;
+            }
+
+            .country-card h3 {
+                font-size: 18px;
+            }
+        }
+
+        /* ===== Price Calculator (Added) ===== */
+        .calc-box {
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px dashed rgba(255, 140, 0, 0.25);
+            text-align: center;
+        }
+
+        .calc-box label {
+            display: block;
+            font-size: 13px;
+            color: #bdbdbd;
+            margin-bottom: 12px;
+        }
+
+        .calc-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .calc-input {
+            flex: 1 1 130px;
+            min-width: 0;
+            max-width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: #111;
+            color: #fff;
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 14px;
+            outline: none;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .calc-input:focus {
+            border-color: #ff8a00;
+            box-shadow: 0 0 15px rgba(255, 120, 0, 0.2);
+        }
+
+        .calc-btn {
+            flex: 1 1 130px;
+            padding: 12px 16px !important;
+            font-size: 14px !important;
+            border-radius: 12px !important;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+
+        .calc-result {
+            margin-top: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #ff9d00;
+            min-height: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .calc-box {
+                margin-top: 16px;
+                padding-top: 16px;
+            }
+            .calc-row {
+                flex-direction: column;
+            }
+            .calc-input, .calc-btn {
+                width: 100%;
+            }
+        }
+</style>
+</head>
+
+<body>
+
+<div class="noise"></div>
+
+<header>
+
+<div class="nav-wrap">
+
+<div class="logo">
+
+                <div class="logo-mark"><i class="fa-solid fa-bolt"></i></div>
+
+<div class="logo-text">
+
+<b>PSYCHO</b>
+
+<span>SHOP</span>
+
+</div>
+
+</div>
+
+<nav>
+
+<ul>
+
+<li><a href="index.html"><i class="fa-solid fa-home"></i>صفحه اصلی</a></li>
+
+<li><a href="services.html"><i class="fa-solid fa-box"></i>محصولات</a></li>
+
+<li><a href="instagram.html"><i class="fa-brands fa-instagram"></i>اینستاگرام</a></li>
+
+
+</ul>
+
+</nav>
+
+<a href="https://t.me/psycho_supp"
+
+target="_blank"
+
+class="btn btn-outline">
+
+<i class="fa-brands fa-telegram"></i>
+
+پشتیبانی
+
+</a>
+
+</div>
+
+</header>
+
+<section class="services-hero">
+
+<div class="container services-header">
+
+<div class="eyebrow">
+
+FAKE REACTIONS
+
+</div>
+
+<h1 class="services-title">
+
+ری‌اکشن
+
+<span>فیک</span>
+
+</h1>
+
+<p class="services-text">
+
+سرویس مورد نظر خود را انتخاب کنید.
+
+</p>
+
+<div class="services-divider"></div>
+
+</div>
+
+</section>
+
+<section class="block">
+
+<div class="container">
+
+<div class="country-grid">
+
+<div class="country-card" data-price="10000" data-unit="1000" data-request="post">
+
+<h3>
+
+ری‌اکشن استارزی
+
+</h3>
+
+<p>
+
+هر 1000 عدد
+
+<br><br>
+
+<b>10,000 تومان</b>
+
+<br><br>
+
+<small>
+
+برای استعلام قیمت ری‌اکشن پریمیوم، به پشتیبانی پیام دهید.
+
+</small>
+
+</p>
+
+<div class="calc-box">
+<label>تعداد مورد نظر خود را وارد کنید:</label>
+<div class="calc-row">
+<input type="number" class="calc-input" min="1" placeholder="مثلاً 5000">
+<button type="button" class="btn btn-outline calc-btn" onclick="psychoCalcPrice(this)">محاسبه قیمت</button>
+</div>
+<div class="calc-result"></div>
+</div>
+
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+
+</div>
+
+<div class="country-card" data-price="3265" data-unit="1" data-request="post">
+
+<h3>
+
+استارز فیک
+
+</h3>
+
+<p>
+
+هر 1 استار
+
+<br><br>
+
+<b>3,265 تومان</b>
+
+
+<br><br>
+
+<small>
+
+یرای خرید به پشتیبانی پیام دهید
+
+</small>
+
+</p>
+
+<div class="calc-box">
+<label>تعداد مورد نظر خود را وارد کنید:</label>
+<div class="calc-row">
+<input type="number" class="calc-input" min="1" placeholder="مثلاً 5000">
+<button type="button" class="btn btn-outline calc-btn" onclick="psychoCalcPrice(this)">محاسبه قیمت</button>
+</div>
+<div class="calc-result"></div>
+</div>
+
+<button type="button" class="btn btn-solid" onclick="psychoAddFromCard(this)"><i class="fa-solid fa-cart-plus"></i> افزودن به سبد خرید</button>
+
+</div>
+
+</div>
+
+<div style="text-align:center;margin-top:60px;">
+
+<a href="telegram-services.html"
+
+class="btn btn-outline btn-lg">
+
+<i class="fa-solid fa-arrow-right"></i>
+
+بازگشت
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+<div class="container">
+
+<div class="footer-bottom">
+
+<span>© 2026 Psycho Shop</span>
+
+<span>Designed By Psycho Shop</span>
+
+</div>
+
+</div>
+
+</footer>
+
+<script>
+
+function psychoCalcPrice(btn){
+    var card = btn.closest('.country-card');
+    if(!card) return;
+    var input = card.querySelector('.calc-input');
+    var out = card.querySelector('.calc-result');
+    var price = parseFloat(card.getAttribute('data-price'));
+    var unit = parseFloat(card.getAttribute('data-unit')) || 1000;
+    if(!input || !out || isNaN(price)) return;
+    var qty = parseFloat(input.value);
+    if(!qty || qty <= 0){
+        out.textContent = 'لطفاً یک عدد معتبر وارد کنید';
+        return;
+    }
+    var total = Math.round((price/unit)*qty);
+    var formatted = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    out.textContent = 'قیمت شما: ' + formatted + ' تومان';
+}
+
+</script>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

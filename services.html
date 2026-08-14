@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محصولات | Psycho Shop</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #090909;
+            color: #fff;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, #ff6a0018, transparent 70%);
+            right: -250px;
+            top: -250px;
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, #ff8a0010, transparent 70%);
+            left: -200px;
+            bottom: -250px;
+            z-index: -2;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .container {
+            width: 1200px;
+            max-width: 92%;
+            margin: auto;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            background: rgba(8, 8, 8, 0.65);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 120, 0, 0.12);
+        }
+
+        .nav-wrap {
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-mark {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ff6a00, #ff9d00);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: 900;
+            color: #111;
+            box-shadow: 0 0 25px rgba(255, 120, 0, 0.5);
+        }
+
+        .logo-mark i {
+            font-size: 28px;
+            color: #111;
+        }
+
+        .logo-text b {
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        .logo-text span {
+            font-size: 11px;
+            letter-spacing: 5px;
+            color: #ff8a00;
+            margin-top: 5px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        nav ul li a {
+            color: #ddd;
+            transition: 0.3s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        nav ul li a i {
+            font-size: 16px;
+            color: #ff8a00;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: #ff8a00;
+            background: rgba(255, 120, 0, 0.08);
+        }
+
+        .btn {
+            padding: 13px 28px;
+            border-radius: 50px;
+            transition: 0.35s;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+.btn-outline {
+            border: 2px solid #ff7a00;
+            background: transparent;
+            color: #fff;
+        }
+
+        .btn-outline:hover {
+            background: #ff7a00;
+            color: #111;
+            transform: translateY(-2px);
+        }
+
+        .btn-solid {
+            background: linear-gradient(135deg, #ff6a00, #ff9d00);
+            color: #111;
+            box-shadow: 0 0 35px rgba(255, 120, 0, 0.45);
+        }
+
+        .btn-solid:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 55px rgba(255, 120, 0, 0.65);
+        }
+
+        .btn-lg {
+            padding: 18px 34px;
+            font-size: 16px;
+        }
+
+        /* ===== SERVICES HERO ===== */
+        .services-hero {
+            padding: 170px 0 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .services-hero::before {
+            content: "";
+            position: absolute;
+            top: -280px;
+            right: -220px;
+            width: 850px;
+            height: 850px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 120, 0, 0.18), transparent 70%);
+            filter: blur(20px);
+            pointer-events: none;
+        }
+
+        .services-hero::after {
+            content: "";
+            position: absolute;
+            left: -220px;
+            bottom: -280px;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 120, 0, 0.12), transparent 70%);
+            filter: blur(25px);
+            pointer-events: none;
+        }
+
+        .services-header {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 950px;
+            margin: auto;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border: 1px solid rgba(255, 140, 0, 0.25);
+            background: rgba(255, 140, 0, 0.08);
+            border-radius: 50px;
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: #ff8a00;
+            margin-bottom: 25px;
+        }
+
+        .eyebrow i {
+            font-size: 14px;
+        }
+
+        .services-title {
+            font-size: 86px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .services-title span {
+            display: block;
+            margin-top: 10px;
+            background: linear-gradient(90deg, #ff6900, #ffb347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .services-text {
+            max-width: 720px;
+            margin: 35px auto;
+            font-size: 18px;
+            line-height: 2.2;
+            color: #bdbdbd;
+        }
+
+        .services-divider {
+            width: 170px;
+            height: 6px;
+            border-radius: 30px;
+            margin: 45px auto 0;
+            background: linear-gradient(90deg, #ff6900, #ffb347);
+            box-shadow: 0 0 15px rgba(255, 120, 0, 0.4), 0 0 35px rgba(255, 120, 0, 0.25);
+        }
+
+        /* ===== SECTION ===== */
+        .block {
+            padding: 60px 0 80px;
+        }
+
+        .section-head {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-head .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 22px;
+            border: 1px solid rgba(255, 140, 0, 0.2);
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 100px;
+            font-weight: 700;
+            color: #ffb347;
+            margin-bottom: 18px;
+        }
+
+        .section-head h2 {
+            font-size: 42px;
+            font-weight: 900;
+            margin: 0 0 10px;
+            color: #fff;
+        }
+.section-head .desc {
+            color: #b8b8b8;
+            font-size: 17px;
+            line-height: 2;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* ===== SERVICE CARDS ===== */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 140, 0, 0.12);
+            border-radius: 24px;
+            padding: 30px 22px;
+            text-align: center;
+            transition: 0.45s;
+            backdrop-filter: blur(18px);
+            animation: cardFade 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .service-card:nth-child(1) { animation-delay: 0.03s; }
+        .service-card:nth-child(2) { animation-delay: 0.06s; }
+        .service-card:nth-child(3) { animation-delay: 0.09s; }
+        .service-card:nth-child(4) { animation-delay: 0.12s; }
+        .service-card:nth-child(5) { animation-delay: 0.15s; }
+        .service-card:nth-child(6) { animation-delay: 0.18s; }
+        .service-card:nth-child(7) { animation-delay: 0.21s; }
+        .service-card:nth-child(8) { animation-delay: 0.24s; }
+        .service-card:nth-child(9) { animation-delay: 0.27s; }
+        .service-card:nth-child(10) { animation-delay: 0.30s; }
+        .service-card:nth-child(11) { animation-delay: 0.33s; }
+        .service-card:nth-child(12) { animation-delay: 0.36s; }
+        .service-card:nth-child(13) { animation-delay: 0.39s; }
+        .service-card:nth-child(14) { animation-delay: 0.42s; }
+        .service-card:nth-child(15) { animation-delay: 0.45s; }
+
+        @keyframes cardFade {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff8a00;
+            box-shadow: 0 18px 45px rgba(255, 120, 0, 0.15), 0 0 35px rgba(255, 120, 0, 0.08);
+        }
+
+        .service-card:hover h3 {
+            color: #ffb347;
+            transition: 0.35s;
+        }
+
+        .service-card:hover p {
+            color: #e8e8e8;
+            transition: 0.35s;
+        }
+
+        .service-card:hover .service-icon {
+            transform: rotate(-8deg) scale(1.08);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            margin: auto;
+            margin-bottom: 22px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ff6900, #ffb347);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 12px 30px rgba(255, 120, 0, 0.3);
+            transition: 0.4s;
+        }
+
+        .service-icon i {
+            font-size: 36px;
+            color: #111;
+        }
+
+        .service-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .service-card p {
+            color: #bfbfbf;
+            line-height: 1.8;
+            font-size: 14px;
+            margin-bottom: 22px;
+            min-height: 45px;
+        }
+
+        .service-card .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 12px 16px;
+            font-size: 14px;
+        }
+
+        .service-card .btn-solid:hover {
+            transform: translateY(-3px);
+        }
+
+        /* ===== CTA ===== */
+        .cta {
+            background: #111;
+            border-radius: 30px;
+            padding: 60px 50px;
+            text-align: center;
+            border: 1px solid rgba(255, 120, 0, 0.15);
+        }
+
+        .cta h2 {
+            font-size: 38px;
+            margin-bottom: 20px;
+        }
+.cta p {
+            color: #bdbdbd;
+            margin-bottom: 35px;
+            line-height: 2;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta .hero-actions {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 70px 0 30px;
+            background: #070707;
+            border-top: 1px solid rgba(255, 120, 0, 0.12);
+            margin-top: 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr 1fr;
+            gap: 60px;
+        }
+
+        .footer-desc {
+            margin-top: 20px;
+            line-height: 2;
+            color: #999;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .footer-social a {
+            width: 45px;
+            height: 45px;
+            background: #111;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .footer-social a:hover {
+            background: #ff7a00;
+            transform: translateY(-4px);
+        }
+
+        .footer-col h5 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 15px;
+        }
+
+        .footer-col a {
+            color: #bdbdbd;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-col a:hover {
+            color: #ff8a00;
+            transform: translateX(-4px);
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .contact-item i {
+            color: #ff8a00;
+            font-size: 22px;
+            margin-top: 4px;
+        }
+
+        .contact-item span {
+            color: #999;
+            font-size: 13px;
+        }
+
+        .contact-item b {
+            color: #fff;
+            display: block;
+        }
+
+        .footer-bottom {
+            margin-top: 60px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.03;
+            pointer-events: none;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* ===== COMING SOON POPUP ===== */
+        .coming-soon {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.35s;
+            z-index: 99999;
+        }
+
+        .coming-soon.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .coming-box {
+            width: 420px;
+            max-width: 90%;
+            background: #111;
+            border: 1px solid rgba(255, 120, 0, 0.2);
+            border-radius: 28px;
+            padding: 45px 30px;
+            text-align: center;
+            box-shadow: 0 0 45px rgba(255, 120, 0, 0.18);
+            animation: popup 0.35s ease;
+        }
+.coming-box i {
+            font-size: 60px;
+            color: #ff8a00;
+            margin-bottom: 25px;
+        }
+
+        .coming-box h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .coming-box p {
+            color: #bdbdbd;
+            line-height: 2;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .coming-box .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        @keyframes popup {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* ================================================================
+                   RESPONSIVE
+                ================================================================ */
+
+        @media (max-width: 992px) {
+            .nav-wrap {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+                gap: 20px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .services-title {
+                font-size: 60px;
+            }
+
+            .service-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .service-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 18px;
+            }
+
+            .cta {
+                padding: 40px 25px;
+            }
+
+            .cta h2 {
+                font-size: 28px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 94%;
+                max-width: 94%;
+            }
+
+            .nav-wrap {
+                padding: 12px 0;
+                gap: 12px;
+            }
+
+            .logo {
+                transform: scale(0.9);
+            }
+
+            nav ul {
+                gap: 4px;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 140, 0, 0.15);
+                padding: 8px 10px;
+                border-radius: 16px;
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            nav ul li a {
+                font-size: 11px;
+                padding: 4px 7px;
+                gap: 3px;
+            }
+
+            nav ul li a i {
+                font-size: 12px;
+            }
+
+            header .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+                border-radius: 12px;
+                font-size: 14px;
+            }
+
+            .services-hero {
+                padding: 190px 0 50px;
+            }
+
+            .services-title {
+                font-size: 42px;
+                letter-spacing: 0;
+            }
+
+            .services-title span {
+                margin-top: 5px;
+            }
+
+            .services-text {
+                font-size: 15px;
+                line-height: 2;
+                margin: 20px auto;
+            }
+
+            .services-divider {
+                width: 120px;
+                height: 4px;
+                margin-top: 25px;
+            }
+
+            .eyebrow {
+                font-size: 11px;
+                padding: 8px 14px;
+                letter-spacing: 1px;
+            }
+
+            .block {
+                padding: 30px 0 50px;
+            }
+
+            .section-head {
+                margin-bottom: 30px;
+            }
+.section-head h2 {
+                font-size: 28px;
+            }
+
+            .section-head .desc {
+                font-size: 15px;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-top: 15px;
+            }
+
+            .service-card {
+                padding: 20px 14px;
+                border-radius: 18px;
+            }
+
+            .service-card h3 {
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+
+            .service-card p {
+                font-size: 12px;
+                margin-bottom: 16px;
+                min-height: 35px;
+                line-height: 1.6;
+            }
+
+            .service-icon {
+                width: 60px;
+                height: 60px;
+                border-radius: 16px;
+                margin-bottom: 16px;
+            }
+
+            .service-icon i {
+                font-size: 26px;
+            }
+
+            .service-card .btn {
+                padding: 10px 12px;
+                font-size: 12px;
+                border-radius: 30px;
+            }
+
+            .cta {
+                padding: 30px 18px;
+                border-radius: 22px;
+            }
+
+            .cta h2 {
+                font-size: 22px;
+            }
+
+            .cta p {
+                font-size: 15px;
+            }
+
+            .cta .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta .hero-actions .btn {
+                width: 100%;
+                justify-content: center;
+                font-size: 14px;
+                padding: 14px 20px;
+            }
+
+            footer {
+                padding: 40px 0 20px;
+                margin-top: 20px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+                font-size: 13px;
+                margin-top: 40px;
+            }
+
+            .coming-box {
+                padding: 30px 20px;
+            }
+
+            .coming-box h2 {
+                font-size: 20px;
+            }
+
+            .coming-box i {
+                font-size: 45px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .service-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .service-card {
+                padding: 16px 10px;
+                border-radius: 14px;
+            }
+
+            .service-card h3 {
+                font-size: 14px;
+            }
+
+            .service-card p {
+                font-size: 11px;
+                min-height: 30px;
+            }
+
+            .service-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                margin-bottom: 12px;
+            }
+
+            .service-icon i {
+                font-size: 20px;
+            }
+
+            .service-card .btn {
+                padding: 8px 10px;
+                font-size: 10px;
+                gap: 5px;
+            }
+
+            .services-title {
+                font-size: 34px;
+            }
+
+            nav ul li a {
+                font-size: 10px;
+                padding: 3px 5px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .service-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .service-card {
+                padding: 12px 8px;
+            }
+
+            .service-card h3 {
+                font-size: 12px;
+            }
+
+            .service-card p {
+                font-size: 10px;
+                min-height: 25px;
+            }
+
+            .service-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                margin-bottom: 10px;
+            }
+
+            .service-icon i {
+                font-size: 16px;
+            }
+.service-card .btn {
+                padding: 6px 8px;
+                font-size: 9px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="noise"></div>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="container nav-wrap">
+            <div class="logo">
+                <div class="logo-mark"><i class="fa-solid fa-bolt"></i></div>
+                <div class="logo-text">
+                    <b>PSYCHO</b>
+                    <span>SHOP</span>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html"><i class="fa-solid fa-home"></i> صفحه اصلی</a></li>
+                    <li><a href="services.html" class="active"><i class="fa-solid fa-box"></i> محصولات</a></li>
+                    <li><a href="index.html#about"><i class="fa-solid fa-info-circle"></i> درباره ما</a></li>
+                    <li><a href="index.html#contact"><i class="fa-solid fa-headset"></i> تماس با ما</a></li>
+                </ul>
+            </nav>
+            <a class="btn btn-outline" href="https://t.me/psycho_supp" target="_blank">
+                <i class="fa-brands fa-telegram"></i> پشتیبانی
+            </a>
+        </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="services-hero">
+        <div class="container services-header">
+            <div class="eyebrow"><i class="fa-solid fa-star"></i> OUR SERVICES</div>
+            <h1 class="services-title">محصولات <span>PSYCHO SHOP</span></h1>
+            <p class="services-text">
+                تمامی خدمات و محصولات دیجیتال ما در این صفحه قرار گرفته‌اند.
+                روی هر دسته کلیک کنید تا وارد صفحه اختصاصی همان محصول شوید.
+            </p>
+            <div class="services-divider"></div>
+        </div>
+    </section>
+
+    <!-- ===== PRODUCTS ===== -->
+    <section class="block" id="products">
+        <div class="container">
+            <div class="section-head">
+                <div class="eyebrow"><i class="fa-solid fa-layer-group"></i> دسته بندی محصولات</div>
+                <h2>تمام سرویس‌ها</h2>
+                <p class="desc">خدمت مورد نظر خود را انتخاب کنید.</p>
+            </div>
+
+            <div class="service-grid">
+
+                <!-- 1. تلگرام پریمیوم -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-brands fa-telegram"></i></div>
+                    <h3>تلگرام پریمیوم</h3>
+                    <p>خرید تلگرام پریمیوم با فعال‌سازی سریع و ضمانت کامل.</p>
+                    <a href="premium.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 2. تلگرام استارز -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-star"></i></div>
+                    <h3>تلگرام استارز</h3>
+                    <p>خرید Telegram Stars با بهترین قیمت بازار.</p>
+                    <a href="stars.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+<!-- 3. بوست تلگرام -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-rocket"></i></div>
+                    <h3>بوست تلگرام</h3>
+                    <p>افزایش Boost کانال و گروه تلگرام.</p>
+                    <a href="boost.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 4. گیفت تلگرام -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-gift"></i></div>
+                    <h3>گیفت تلگرام</h3>
+                    <p>ارسال انواع گیفت تلگرام با تحویل فوری.</p>
+                    <a href="gift.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 5. شماره مجازی -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-sim-card"></i></div>
+                    <h3>شماره مجازی</h3>
+                    <p>شماره مجازی کشورهای مختلف برای ثبت‌نام.</p>
+                    <a href="virtual-number.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 6. اسکم -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-user-secret"></i></div>
+                    <h3>اسکم</h3>
+                    <p>خدمات ریپورت و محدودسازی اکانت.</p>
+                    <a href="scam.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 7. اینستاگرام -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-brands fa-instagram"></i></div>
+                    <h3>اینستاگرام</h3>
+                    <p>فالوور، لایک، ویو، تبلیغات و...</p>
+                    <a href="instagram.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 8. تیک تاک -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-brands fa-tiktok"></i></div>
+                    <h3>تیک تاک</h3>
+                    <p>خدمات حرفه‌ای TikTok.</p>
+                    <a href="service-contact.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 9. یوتیوب -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-brands fa-youtube"></i></div>
+                    <h3>یوتیوب</h3>
+                    <p>افزایش بازدید، سابسکرایب و واچ تایم.</p>
+                    <a href="service-contact.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 10. اسپاتیفای -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-brands fa-spotify"></i></div>
+                    <h3>اسپاتیفای</h3>
+                    <p>خدمات اسپاتیفای</p>
+                    <a href="service-contact.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 11. توییتر X -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-brands fa-x-twitter"></i></div>
+                    <h3>توییتر X</h3>
+                    <p>انواع خدمات Twitter X.</p>
+                    <a href="service-contact.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 12. گیم -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-gamepad"></i></div>
+<h3>گیم</h3>
+                    <p>خرید آیتم و خدمات بازی‌های آنلاین.</p>
+                    <a href="javascript:void(0)" onclick="openComing()" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 13. روبیکا -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                    <h3>روبیکا</h3>
+                    <p>خدمات روبیکا و تبلیغات.</p>
+                    <a href="service-contact.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 14. اشتراک‌ها -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-crown"></i></div>
+                    <h3>اشتراک‌ها</h3>
+                    <p>انواع اشتراک‌های Premium و دیجیتال.</p>
+                    <a href="javascript:void(0)" onclick="openComing()" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده قیمت</a>
+                </div>
+
+                <!-- 15. خدمات تلگرام -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-brands fa-telegram"></i></div>
+                    <h3>خدمات تلگرام</h3>
+                    <p>انواع خدمات تلگرام شامل ممبر، بازدید، تبلیغات و سرویس‌های کاربردی.</p>
+                    <a href="telegram-services.html" class="btn btn-solid"><i class="fa-solid fa-arrow-left"></i> مشاهده خدمات</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="block">
+        <div class="container">
+            <div class="cta">
+                <h2><i class="fa-solid fa-magnifying-glass" style="color:#ff8a00;"></i> سرویس مورد نظرت را پیدا نکردی؟</h2>
+                <p>
+                    اگر محصول یا سرویس خاصی مدنظرت است، از طریق تلگرام با ما در ارتباط باش تا قیمت و موجودی را برایت ارسال کنیم.
+                </p>
+                <div class="hero-actions">
+                    <a href="https://t.me/psycho_supp" target="_blank" class="btn btn-solid btn-lg">
+                        <i class="fa-brands fa-telegram"></i> ارتباط با پشتیبانی
+                    </a>
+                    <a href="index.html" class="btn btn-outline btn-lg">
+                        <i class="fa-solid fa-house"></i> بازگشت به صفحه اصلی
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="logo">
+                        <div class="logo-mark"><i class="fa-solid fa-bolt"></i></div>
+                        <div class="logo-text">
+                            <b>PSYCHO</b>
+                            <span>SHOP</span>
+                        </div>
+                    </div>
+                    <p class="footer-desc">
+                        فروش انواع محصولات تلگرام، شبکه‌های اجتماعی و خدمات دیجیتال با بهترین قیمت و تحویل سریع.
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://t.me/psycho_supp" target="_blank">
+                            <i class="fa-brands fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h5>دسترسی سریع</h5>
+                    <ul>
+                        <li><a href="index.html"><i class="fa-solid fa-chevron-left"></i> صفحه اصلی</a></li>
+                        <li><a href="#products"><i class="fa-solid fa-chevron-left"></i> محصولات</a></li>
+                        <li><a href="index.html#contact"><i class="fa-solid fa-chevron-left"></i> تماس با ما</a></li>
+</ul>
+                </div>
+                <div class="footer-col">
+                    <h5>پشتیبانی</h5>
+                    <div class="contact-item">
+                        <i class="fa-brands fa-telegram"></i>
+                        <div>
+                            <span>تلگرام</span>
+                            <b>@psycho_supp</b>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-clock"></i>
+                        <div>
+                            <span>ساعات پاسخگویی</span>
+                            <b>24/7</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Psycho Shop</span>
+                <span>Designed By <i class="fa-solid fa-bolt" style="color:#ff8a00;"></i> Psycho Shop</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== COMING SOON POPUP ===== -->
+    <div id="comingSoon" class="coming-soon">
+        <div class="coming-box">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <h2>این محصول موقتاً غیرفعال می‌باشد</h2>
+            <p>
+                در حال حاضر امکان ثبت سفارش این محصول وجود ندارد.
+                <br><br>
+                به‌زودی این بخش فعال خواهد شد.
+            </p>
+            <button class="btn btn-solid" onclick="closeComing()">
+                <i class="fa-solid fa-check"></i> باشه
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        function openComing() {
+            document.getElementById("comingSoon").classList.add("show");
+        }
+
+        function closeComing() {
+            document.getElementById("comingSoon").classList.remove("show");
+        }
+
+        // بستن با کلیک خارج از باکس
+        document.getElementById("comingSoon").addEventListener("click", function(e) {
+            if (e.target === this) {
+                closeComing();
+            }
+        });
+    </script>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
