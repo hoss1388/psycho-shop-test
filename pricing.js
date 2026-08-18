@@ -1,17 +1,5 @@
 /* =========================================================
-   Psycho Shop - Fragment Live Pricing Engine
-   ---------------------------------------------------------
-   Premium:
-   - Reads the common Premium base price from api/prices.json
-   - Supports prices stored as:
-       { ton: 10.5, toman: 2593248 }
-   - Same base price for Single Boost and Four Boost
-   - Separate deductions for Single/Four Boost
-   - Deductions are currently 0
-
-   Stars:
-   - Keeps existing fixed prices for 13 and 21 Stars
-   - Other packages use the live data
+   Psycho Shop - Simple Live Premium Pricing
    ========================================================= */
 
 (function () {
@@ -20,32 +8,16 @@
     console.log("[pricing] pricing.js loaded");
 
     var PRICE_ENDPOINT = "api/prices.json";
-
-    // Refresh every 3 minutes
     var REFRESH_MS = 3 * 60 * 1000;
 
-    // Reject prices older than 15 minutes
-    var MAX_PRICE_AGE_MS = 15 * 60 * 1000;
-
-
-    /* =====================================================
-       PREMIUM DEDUCTIONS
-       -----------------------------------------------------
-       These are intentionally 0 for now.
-
-       Later, if you want for example:
-
-       Single 3 months:
-       base - 300000
-
-       Four 3 months:
-       base - 700000
-
-       simply change the numbers below.
-       ===================================================== */
+    /*
+     * Premium deductions
+     *
+     * فعلاً صفر هستند تا قیمت واقعی پایه را ببینیم.
+     * بعداً فقط همین اعداد را تغییر می‌دهیم.
+     */
 
     var PREMIUM_DEDUCTION = {
-
         single: {
             "3m": 0,
             "6m": 0,
@@ -60,9 +32,9 @@
     };
 
 
-    /* =====================================================
-       STARS SETTINGS
-       ===================================================== */
+    /*
+     * Stars
+     */
 
     var MARGIN_STARS = 47000;
 
@@ -72,196 +44,82 @@
     };
 
 
-    /* =====================================================
-       INTERNAL STATE
-       ===================================================== */
-
     var priceData = null;
 
-    var listeners = [];
-
 
     /* =====================================================
-       HELPERS
+       Helpers
        ===================================================== */
 
-    function roundTo(n, step) {
-
+    function roundTo(number, step) {
         step = step || 1000;
-
-        return Math.ceil(n / step) * step;
+        return Math.ceil(number / step) * step;
     }
 
 
-    function toFiniteNumber(value) {
+    function toNumber(value) {
 
-        var numeric;
-
-        if (typeof value === "string") {
-
-            numeric = Number(
-                value.replace(/,/g, "")
-            );
-
-        } else {
-
-            numeric = Number(value);
+        if (value === null || value === undefined) {
+            return null;
         }
 
-        return Number.isFinite(numeric) && numeric > 0
-            ? numeric
+        var number = Number(
+            String(value).replace(/,/g, "")
+        );
+
+        return Number.isFinite(number) && number > 0
+            ? number
             : null;
     }
 
 
-    function fmt(n) {
+    function formatPrice(number) {
 
-        n = Math.round(n || 0);
-
-        return n
+        return Math.round(number || 0)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
 
     /* =====================================================
-       PREMIUM DATA VALIDATION
-       ===================================================== */
-
-    function isFreshPremiumPayload(data) {
-
-        if (
-            !data ||
-            !data.premium ||
-            !data.premium.single ||
-            !data.updatedAt ||
-            !data.tonToToman
-        ) {
-
-            return false;
-        }
-
-
-        var updatedAt = Date.parse(
-            data.updatedAt
-        );
-
-        var age =
-            Date.now() - updatedAt;
-
-
-        if (
-            !Number.isFinite(updatedAt) ||
-            age < -60000 ||
-            age > MAX_PRICE_AGE_MS
-        ) {
-
-            return false;
-        }
-
-
-        if (
-            toFiniteNumber(
-                data.tonToToman
-            ) === null
-        ) {
-
-            return false;
-        }
-
-
-        /*
-         * Current prices.json format:
-
-         premium.single["3m"] = {
-             ton: 10.5,
-             toman: 2593248
-         }
-
-         We accept both:
-
-         1. Object format:
-            { ton: 10.5, toman: 2593248 }
-
-         2. Number format:
-            10.5
-        */
-
-        var validPlans =
-            ["3m", "6m", "12m"];
-
-
-        return validPlans.every(
-            function (plan) {
-
-                var value =
-                    data.premium.single[plan];
-
-                if (
-                    value &&
-                    typeof value === "object"
-                ) {
-
-                    return (
-                        toFiniteNumber(
-                            value.toman
-                        ) !== null ||
-                        toFiniteNumber(
-                            value.ton
-                        ) !== null
-                    );
-                }
-
-
-                return (
-                    toFiniteNumber(value) !== null
-                );
-            }
-        );
-    }
-
-
-    /* =====================================================
-       FETCH PRICES
+       Load prices.json
        ===================================================== */
 
     function fetchPrices() {
 
-        console.log(
-            "[pricing] Fetching:",
-            PRICE_ENDPOINT
-        );
-
-
         return fetch(
-            PRICE_ENDPOINT +
-            "?_=" +
-            Date.now(),
+            PRICE_ENDPOINT + "?_=" + Date.now(),
             {
                 cache: "no-store"
             }
         )
 
-        .then(function (res) {
+        .then(function (response) {
 
-            if (!res.ok) {
-
+            if (!response.ok) {
                 throw new Error(
-                    "HTTP " + res.status
+                    "HTTP " + response.status
                 );
             }
 
-            return res.json();
+            return response.json();
         })
 
         .then(function (data) {
 
+            /*
+             * فقط چیزهایی که واقعاً در
+             * prices.json تو وجود دارند را بررسی می‌کنیم.
+             */
+
             if (
-                !isFreshPremiumPayload(data)
+                !data ||
+                !data.premium ||
+                !data.premium.single
             ) {
 
                 throw new Error(
-                    "prices.json is invalid or outdated"
+                    "premium.single در prices.json پیدا نشد"
                 );
             }
 
@@ -270,130 +128,107 @@
 
 
             console.log(
-                "[pricing] Live prices loaded:",
+                "[pricing] prices.json loaded",
                 priceData
             );
 
 
-            notify();
+            renderCards();
+            renderCustomStarsBox();
 
 
             return data;
         })
 
-        .catch(function (err) {
+        .catch(function (error) {
 
-            /*
-             * Do NOT destroy previously loaded
-             * valid data if a temporary network
-             * error happens.
-             */
-
-            console.warn(
-                "[pricing] Live prices unavailable:",
-                err
+            console.error(
+                "[pricing] Failed to load prices.json:",
+                error
             );
 
 
-            notify();
+            /*
+             * اینجا دیگر قیمت را به خاطر
+             * health/sources و غیره مخفی نمی‌کنیم.
+             */
+
+            renderCards();
+            renderCustomStarsBox();
         });
     }
 
 
     /* =====================================================
-       NOTIFY
-       ===================================================== */
-
-    function notify() {
-
-        listeners.forEach(
-            function (fn) {
-
-                try {
-
-                    fn(priceData);
-
-                } catch (e) {
-
-                    console.error(
-                        "[pricing] Listener error:",
-                        e
-                    );
-                }
-            }
-        );
-    }
-
-
-    /* =====================================================
-       STARS RAW PRICE
+       Stars
        ===================================================== */
 
     function starsRawToman(qty) {
 
         if (
             !priceData ||
-            !priceData.stars
+            !priceData.tonToToman
         ) {
-
             return null;
         }
 
 
-        var tonPerStar =
-            toFiniteNumber(
-                priceData.stars.tonPerStar
-            );
-
-
-        var tonToToman =
-            toFiniteNumber(
+        var rate =
+            toNumber(
                 priceData.tonToToman
             );
 
 
-        if (
-            tonPerStar === null ||
-            tonToToman === null
-        ) {
-
+        if (rate === null) {
             return null;
         }
 
 
-        return (
-            tonPerStar *
-            qty *
-            tonToToman
-        );
+        /*
+         * اگر tonPerStar وجود داشته باشد
+         */
+
+        if (
+            priceData.stars &&
+            priceData.stars.tonPerStar
+        ) {
+
+            var tonPerStar =
+                toNumber(
+                    priceData.stars.tonPerStar
+                );
+
+
+            if (tonPerStar !== null) {
+
+                return (
+                    tonPerStar *
+                    qty *
+                    rate
+                );
+            }
+        }
+
+
+        /*
+         * اگر stars موجود نبود،
+         * فعلاً قیمت استارز را نداریم.
+         */
+
+        return null;
     }
 
-
-    /* =====================================================
-       STARS FINAL PRICE
-       ===================================================== */
 
     window.psychoStarsPrice =
         function (qty) {
 
-            qty = parseInt(
-                qty,
-                10
-            );
+            qty = parseInt(qty, 10);
 
 
-            if (
-                !qty ||
-                qty <= 0
-            ) {
-
+            if (!qty || qty <= 0) {
                 return null;
             }
 
-
-            /*
-             * Fixed Stars prices
-             */
 
             if (
                 Object.prototype.hasOwnProperty.call(
@@ -411,42 +246,22 @@
 
 
             if (raw === null) {
-
                 return null;
             }
 
 
             return (
-                roundTo(
-                    raw,
-                    500
-                ) +
+                roundTo(raw, 500) +
                 MARGIN_STARS
             );
         };
 
 
     /* =====================================================
-       PREMIUM BASE PRICE
-       -----------------------------------------------------
-       IMPORTANT:
-
-       We intentionally use the SAME base price
-       for Single Boost and Four Boost.
-
-       If prices.json contains:
-
-       {
-         "ton": 10.5,
-         "toman": 2593248
-       }
-
-       we use the "toman" value directly.
-
-       This avoids converting TON a second time.
+       Premium
        ===================================================== */
 
-    function premiumBaseToman(plan) {
+    function getPremiumBaseToman(plan) {
 
         if (
             !priceData ||
@@ -458,140 +273,87 @@
         }
 
 
-        var value =
+        var item =
             priceData
                 .premium
                 .single[plan];
 
 
-        if (!value) {
-
+        if (!item) {
             return null;
         }
 
 
         /*
-         * Current format:
+         * ساختار فعلی prices.json:
          *
-         * {
-         *   ton: 10.5,
-         *   toman: 2593248
+         * "3m": {
+         *     "ton": 10.5,
+         *     "toman": 2593248
          * }
          *
-         * Prefer the already calculated
-         * toman value.
+         * مستقیماً toman را استفاده می‌کنیم.
          */
 
         if (
-            typeof value === "object"
+            typeof item === "object" &&
+            item.toman !== undefined
         ) {
 
             var toman =
-                toFiniteNumber(
-                    value.toman
-                );
+                toNumber(item.toman);
 
 
             if (toman !== null) {
-
                 return toman;
             }
+        }
 
 
-            /*
-             * Fallback:
-             * If toman is missing but TON exists,
-             * calculate it using the current TON rate.
-             */
+        /*
+         * Fallback:
+         * اگر toman نبود ولی ton وجود داشت،
+         * با نرخ TON تبدیل می‌کنیم.
+         */
+
+        if (
+            typeof item === "object" &&
+            item.ton !== undefined &&
+            priceData.tonToToman
+        ) {
 
             var ton =
-                toFiniteNumber(
-                    value.ton
-                );
+                toNumber(item.ton);
 
 
-            var tonToToman =
-                toFiniteNumber(
+            var rate =
+                toNumber(
                     priceData.tonToToman
                 );
 
 
             if (
                 ton !== null &&
-                tonToToman !== null
+                rate !== null
             ) {
 
-                return (
-                    ton *
-                    tonToToman
-                );
+                return ton * rate;
             }
-
-
-            return null;
         }
 
 
-        /*
-         * Compatibility with old format where
-         * the value itself was TON.
-         */
-
-        var numericTon =
-            toFiniteNumber(value);
-
-
-        var rate =
-            toFiniteNumber(
-                priceData.tonToToman
-            );
-
-
-        if (
-            numericTon === null ||
-            rate === null
-        ) {
-
-            return null;
-        }
-
-
-        return (
-            numericTon *
-            rate
-        );
+        return null;
     }
 
 
-    /* =====================================================
-       PREMIUM FINAL PRICE
-       -----------------------------------------------------
-       tier:
-         single = Single Boost
-         four   = Four Boost
-
-       plan:
-         3m
-         6m
-         12m
-
-       Formula:
-
-         Base Price
-           -
-         Tier Deduction
-           =
-         Final Price
-       ===================================================== */
-
     window.psychoPremiumPrice =
-        function (
-            tier,
-            plan
-        ) {
+        function (tier, plan) {
 
             /*
-             * Make sure tier is valid.
+             * فقط دو نوع داریم:
+             *
+             * single = تک بوست
+             * four   = چهار بوست
              */
 
             if (
@@ -603,35 +365,21 @@
             }
 
 
-            /*
-             * Get common Premium base price.
-             */
-
             var base =
-                premiumBaseToman(
-                    plan
-                );
+                getPremiumBaseToman(plan);
 
 
             if (base === null) {
-
                 return null;
             }
 
-
-            /*
-             * Get deduction.
-             */
 
             var deduction = 0;
 
 
             if (
                 PREMIUM_DEDUCTION[tier] &&
-                Object.prototype.hasOwnProperty.call(
-                    PREMIUM_DEDUCTION[tier],
-                    plan
-                )
+                PREMIUM_DEDUCTION[tier][plan] !== undefined
             ) {
 
                 deduction =
@@ -642,33 +390,17 @@
 
 
             /*
-             * Round the common base price.
-             */
-
-            var roundedBase =
-                roundTo(
-                    base,
-                    1000
-                );
-
-
-            /*
-             * Apply deduction.
+             * قیمت پایه مشترک
+             * منهای مبلغ مخصوص همان نوع
              */
 
             var finalPrice =
-                roundedBase -
+                roundTo(base, 1000) -
                 deduction;
 
 
-            /*
-             * Never allow zero/negative price.
-             */
-
             if (
-                !Number.isFinite(
-                    finalPrice
-                ) ||
+                !Number.isFinite(finalPrice) ||
                 finalPrice <= 0
             ) {
 
@@ -681,7 +413,7 @@
 
 
     /* =====================================================
-       RENDER SERVICE CARDS
+       Render Cards
        ===================================================== */
 
     function renderCards() {
@@ -693,127 +425,109 @@
             );
 
 
-        cards.forEach(
-            function (card) {
+        cards.forEach(function (card) {
 
-                var price = null;
+            var request =
+                card.getAttribute(
+                    "data-request"
+                );
 
 
-                var request =
+            var price = null;
+
+
+            /*
+             * Stars
+             */
+
+            if (request === "stars") {
+
+                var qty =
+                    parseInt(
+                        card.getAttribute(
+                            "data-stars-qty"
+                        ),
+                        10
+                    );
+
+
+                price =
+                    window.psychoStarsPrice(
+                        qty
+                    );
+            }
+
+
+            /*
+             * Premium
+             */
+
+            if (request === "premium") {
+
+                var tier =
                     card.getAttribute(
-                        "data-request"
+                        "data-premium-tier"
                     );
 
 
-                /* -------------------------
-                   STARS
-                   ------------------------- */
-
-                if (
-                    request === "stars"
-                ) {
-
-                    var qty =
-                        parseInt(
-                            card.getAttribute(
-                                "data-stars-qty"
-                            ),
-                            10
-                        );
-
-
-                    price =
-                        window.psychoStarsPrice(
-                            qty
-                        );
-                }
-
-
-                /* -------------------------
-                   PREMIUM
-                   ------------------------- */
-
-                else {
-
-                    var tier =
-                        card.getAttribute(
-                            "data-premium-tier"
-                        );
-
-
-                    var plan =
-                        card.getAttribute(
-                            "data-premium-plan"
-                        );
-
-
-                    price =
-                        window.psychoPremiumPrice(
-                            tier,
-                            plan
-                        );
-                }
-
-
-                var slot =
-                    card.querySelector(
-                        "[data-price-slot]"
+                var plan =
+                    card.getAttribute(
+                        "data-premium-plan"
                     );
 
 
-                /* -------------------------
-                   PRICE UNAVAILABLE
-                   ------------------------- */
-
-                if (price === null) {
-
-                    if (slot) {
-
-                        slot.textContent =
-                            "قیمت آنلاین موقتاً در دسترس نیست";
-                    }
-
-
-                    card.setAttribute(
-                        "data-price",
-                        ""
+                price =
+                    window.psychoPremiumPrice(
+                        tier,
+                        plan
                     );
+            }
 
 
-                    return;
-                }
+            var slot =
+                card.querySelector(
+                    "[data-price-slot]"
+                );
 
 
-                /* -------------------------
-                   DISPLAY PRICE
-                   ------------------------- */
+            if (price === null) {
 
                 if (slot) {
 
                     slot.textContent =
-                        fmt(price) +
-                        " تومان";
+                        "قیمت آنلاین موقتاً در دسترس نیست";
                 }
 
 
-                /*
-                 * IMPORTANT:
-                 * script.js can read this
-                 * when adding product to cart.
-                 */
-
                 card.setAttribute(
                     "data-price",
-                    price
+                    ""
                 );
 
 
-                card.setAttribute(
-                    "data-unit",
-                    "1"
-                );
+                return;
             }
-        );
+
+
+            if (slot) {
+
+                slot.textContent =
+                    formatPrice(price) +
+                    " تومان";
+            }
+
+
+            card.setAttribute(
+                "data-price",
+                price
+            );
+
+
+            card.setAttribute(
+                "data-unit",
+                "1"
+            );
+        });
 
 
         renderCustomStarsBox();
@@ -821,7 +535,7 @@
 
 
     /* =====================================================
-       CUSTOM STARS BOX
+       Custom Stars
        ===================================================== */
 
     function renderCustomStarsBox() {
@@ -832,7 +546,7 @@
             );
 
 
-        var out =
+        var output =
             document.getElementById(
                 "starsCustomPriceOut"
             );
@@ -852,10 +566,9 @@
 
         if (
             !input ||
-            !out ||
+            !output ||
             !card
         ) {
-
             return;
         }
 
@@ -872,7 +585,7 @@
             qty <= 0
         ) {
 
-            out.textContent =
+            output.textContent =
                 "تعداد استار را وارد کنید";
 
 
@@ -890,7 +603,7 @@
 
             label.textContent =
                 "(" +
-                fmt(qty) +
+                formatPrice(qty) +
                 " استار)";
         }
 
@@ -903,8 +616,8 @@
 
         if (price === null) {
 
-            out.textContent =
-                "در حال دریافت قیمت آنی...";
+            output.textContent =
+                "قیمت آنلاین موقتاً در دسترس نیست";
 
 
             card.setAttribute(
@@ -917,10 +630,10 @@
         }
 
 
-        out.textContent =
-            fmt(qty) +
+        output.textContent =
+            formatPrice(qty) +
             " استار = " +
-            fmt(price) +
+            formatPrice(price) +
             " تومان";
 
 
@@ -938,16 +651,16 @@
 
 
     /* =====================================================
-       CUSTOM STARS INPUT
+       Custom Stars Input
        ===================================================== */
 
     document.addEventListener(
         "input",
-        function (e) {
+        function (event) {
 
             if (
-                e.target &&
-                e.target.id ===
+                event.target &&
+                event.target.id ===
                     "starsCustomQty"
             ) {
 
@@ -958,16 +671,7 @@
 
 
     /* =====================================================
-       REGISTER RENDER LISTENER
-       ===================================================== */
-
-    listeners.push(
-        renderCards
-    );
-
-
-    /* =====================================================
-       INITIALIZATION
+       Start
        ===================================================== */
 
     function init() {
@@ -999,32 +703,20 @@
 
 
     /* =====================================================
-       DEBUG API
+       Debug
        ===================================================== */
 
     window.__psychoPricing = {
 
-        fetchPrices:
-            fetchPrices,
+        fetchPrices: fetchPrices,
 
         get data() {
             return priceData;
         },
 
-        get premiumDeductions() {
+        get deductions() {
             return PREMIUM_DEDUCTION;
-        },
-
-        get premiumBase() {
-
-            return function (plan) {
-
-                return premiumBaseToman(
-                    plan
-                );
-            };
         }
     };
-
 
 })();
