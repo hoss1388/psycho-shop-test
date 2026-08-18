@@ -1,5 +1,11 @@
 /* =========================================================
-   Psycho Shop - Simple Live Premium Pricing
+   Psycho Shop - Fragment Live Pricing Engine
+   ---------------------------------------------------------
+   Premium pricing:
+   - Reads live raw Premium prices from api/prices.json
+   - Applies proportional pricing coefficients
+   - Single Boost and Four Boost use different coefficients
+   - Prices automatically change when Fragment's raw price changes
    ========================================================= */
 
 (function () {
@@ -8,33 +14,58 @@
     console.log("[pricing] pricing.js loaded");
 
     var PRICE_ENDPOINT = "api/prices.json";
+
+    // سایت هر 3 دقیقه prices.json را دوباره بررسی می‌کند
     var REFRESH_MS = 3 * 60 * 1000;
 
-    /*
-     * Premium deductions
-     *
-     * فعلاً صفر هستند تا قیمت واقعی پایه را ببینیم.
-     * بعداً فقط همین اعداد را تغییر می‌دهیم.
-     */
 
-    var PREMIUM_DEDUCTION = {
+    /* =====================================================
+       PREMIUM COEFFICIENTS
+       -----------------------------------------------------
+       Based on the current raw prices:
+
+       Raw:
+       3m  = 2,593,248
+       6m  = 4,840,730
+       12m = 8,644,160
+
+       Target:
+
+       SINGLE
+       3m  = 2,340,000
+       6m  = 3,100,000
+       12m = 5,520,000
+
+       FOUR
+       3m  = 2,500,000
+       6m  = 3,300,000
+       12m = 5,725,000
+
+       Formula:
+
+       final = raw × coefficient
+       ===================================================== */
+
+    var PREMIUM_COEFFICIENTS = {
+
         single: {
-            "3m": 0,
-            "6m": 0,
-            "12m": 0
+            "3m": 2340000 / 2593248,
+            "6m": 3100000 / 4840730,
+            "12m": 5520000 / 8644160
         },
 
         four: {
-            "3m": 0,
-            "6m": 0,
-            "12m": 0
+            "3m": 2500000 / 2593248,
+            "6m": 3300000 / 4840730,
+            "12m": 5725000 / 8644160
         }
+
     };
 
 
-    /*
-     * Stars
-     */
+    /* =====================================================
+       STARS
+       ===================================================== */
 
     var MARGIN_STARS = 47000;
 
@@ -48,18 +79,23 @@
 
 
     /* =====================================================
-       Helpers
+       HELPERS
        ===================================================== */
 
     function roundTo(number, step) {
+
         step = step || 1000;
+
         return Math.ceil(number / step) * step;
     }
 
 
     function toNumber(value) {
 
-        if (value === null || value === undefined) {
+        if (
+            value === null ||
+            value === undefined
+        ) {
             return null;
         }
 
@@ -77,12 +113,15 @@
 
         return Math.round(number || 0)
             .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            .replace(
+                /\B(?=(\d{3})+(?!\d))/g,
+                ","
+            );
     }
 
 
     /* =====================================================
-       Load prices.json
+       LOAD prices.json
        ===================================================== */
 
     function fetchPrices() {
@@ -97,6 +136,7 @@
         .then(function (response) {
 
             if (!response.ok) {
+
                 throw new Error(
                     "HTTP " + response.status
                 );
@@ -107,11 +147,6 @@
 
         .then(function (data) {
 
-            /*
-             * فقط چیزهایی که واقعاً در
-             * prices.json تو وجود دارند را بررسی می‌کنیم.
-             */
-
             if (
                 !data ||
                 !data.premium ||
@@ -119,7 +154,7 @@
             ) {
 
                 throw new Error(
-                    "premium.single در prices.json پیدا نشد"
+                    "premium.single not found"
                 );
             }
 
@@ -128,7 +163,7 @@
 
 
             console.log(
-                "[pricing] prices.json loaded",
+                "[pricing] Live prices loaded:",
                 priceData
             );
 
@@ -147,10 +182,9 @@
                 error
             );
 
-
             /*
-             * اینجا دیگر قیمت را به خاطر
-             * health/sources و غیره مخفی نمی‌کنیم.
+             * اگر قیمت قبلی معتبر داریم،
+             * همان را نگه می‌داریم.
              */
 
             renderCards();
@@ -160,7 +194,7 @@
 
 
     /* =====================================================
-       Stars
+       STARS RAW PRICE
        ===================================================== */
 
     function starsRawToman(qty) {
@@ -169,6 +203,7 @@
             !priceData ||
             !priceData.tonToToman
         ) {
+
             return null;
         }
 
@@ -183,10 +218,6 @@
             return null;
         }
 
-
-        /*
-         * اگر tonPerStar وجود داشته باشد
-         */
 
         if (
             priceData.stars &&
@@ -210,22 +241,28 @@
         }
 
 
-        /*
-         * اگر stars موجود نبود،
-         * فعلاً قیمت استارز را نداریم.
-         */
-
         return null;
     }
 
 
+    /* =====================================================
+       STARS FINAL PRICE
+       ===================================================== */
+
     window.psychoStarsPrice =
         function (qty) {
 
-            qty = parseInt(qty, 10);
+            qty = parseInt(
+                qty,
+                10
+            );
 
 
-            if (!qty || qty <= 0) {
+            if (
+                !qty ||
+                qty <= 0
+            ) {
+
                 return null;
             }
 
@@ -246,22 +283,39 @@
 
 
             if (raw === null) {
+
                 return null;
             }
 
 
             return (
-                roundTo(raw, 500) +
+                roundTo(
+                    raw,
+                    500
+                ) +
                 MARGIN_STARS
             );
         };
 
 
     /* =====================================================
-       Premium
+       PREMIUM RAW PRICE
+       -----------------------------------------------------
+       مهم:
+       قیمت خام مستقیماً از مقدار toman داخل
+       prices.json گرفته می‌شود.
+
+       مثال:
+
+       "3m": {
+           "ton": 10.5,
+           "toman": 2593248
+       }
+
+       ما 2593248 را به عنوان raw price می‌گیریم.
        ===================================================== */
 
-    function getPremiumBaseToman(plan) {
+    function premiumRawToman(plan) {
 
         if (
             !priceData ||
@@ -285,14 +339,7 @@
 
 
         /*
-         * ساختار فعلی prices.json:
-         *
-         * "3m": {
-         *     "ton": 10.5,
-         *     "toman": 2593248
-         * }
-         *
-         * مستقیماً toman را استفاده می‌کنیم.
+         * فرمت فعلی prices.json
          */
 
         if (
@@ -301,10 +348,13 @@
         ) {
 
             var toman =
-                toNumber(item.toman);
+                toNumber(
+                    item.toman
+                );
 
 
             if (toman !== null) {
+
                 return toman;
             }
         }
@@ -312,8 +362,8 @@
 
         /*
          * Fallback:
-         * اگر toman نبود ولی ton وجود داشت،
-         * با نرخ TON تبدیل می‌کنیم.
+         * اگر toman وجود نداشت،
+         * از TON × نرخ TON استفاده می‌کنیم.
          */
 
         if (
@@ -323,7 +373,9 @@
         ) {
 
             var ton =
-                toNumber(item.ton);
+                toNumber(
+                    item.ton
+                );
 
 
             var rate =
@@ -337,7 +389,10 @@
                 rate !== null
             ) {
 
-                return ton * rate;
+                return (
+                    ton *
+                    rate
+                );
             }
         }
 
@@ -346,15 +401,23 @@
     }
 
 
-    window.psychoPremiumPrice =
-        function (tier, plan) {
+    /* =====================================================
+       PREMIUM FINAL PRICE
+       -----------------------------------------------------
+       Formula:
 
-            /*
-             * فقط دو نوع داریم:
-             *
-             * single = تک بوست
-             * four   = چهار بوست
-             */
+       final price =
+       raw price × coefficient
+
+       بنابراین وقتی Fragment قیمت خام را تغییر دهد،
+       قیمت سایت نیز به همان نسبت تغییر می‌کند.
+       ===================================================== */
+
+    window.psychoPremiumPrice =
+        function (
+            tier,
+            plan
+        ) {
 
             if (
                 tier !== "single" &&
@@ -365,42 +428,37 @@
             }
 
 
-            var base =
-                getPremiumBaseToman(plan);
+            if (
+                !PREMIUM_COEFFICIENTS[tier] ||
+                !PREMIUM_COEFFICIENTS[tier][plan]
+            ) {
 
-
-            if (base === null) {
                 return null;
             }
 
 
-            var deduction = 0;
+            var raw =
+                premiumRawToman(plan);
 
 
-            if (
-                PREMIUM_DEDUCTION[tier] &&
-                PREMIUM_DEDUCTION[tier][plan] !== undefined
-            ) {
+            if (raw === null) {
 
-                deduction =
-                    Number(
-                        PREMIUM_DEDUCTION[tier][plan]
-                    ) || 0;
+                return null;
             }
 
 
-            /*
-             * قیمت پایه مشترک
-             * منهای مبلغ مخصوص همان نوع
-             */
+            var coefficient =
+                PREMIUM_COEFFICIENTS[tier][plan];
+
 
             var finalPrice =
-                roundTo(base, 1000) -
-                deduction;
+                raw * coefficient;
 
 
             if (
-                !Number.isFinite(finalPrice) ||
+                !Number.isFinite(
+                    finalPrice
+                ) ||
                 finalPrice <= 0
             ) {
 
@@ -408,12 +466,20 @@
             }
 
 
-            return finalPrice;
+            /*
+             * گرد کردن قیمت به نزدیک‌ترین
+             * 1000 تومان
+             */
+
+            return roundTo(
+                finalPrice,
+                1000
+            );
         };
 
 
     /* =====================================================
-       Render Cards
+       RENDER CARDS
        ===================================================== */
 
     function renderCards() {
@@ -436,11 +502,13 @@
             var price = null;
 
 
-            /*
-             * Stars
-             */
+            /* -------------------------
+               STARS
+               ------------------------- */
 
-            if (request === "stars") {
+            if (
+                request === "stars"
+            ) {
 
                 var qty =
                     parseInt(
@@ -458,11 +526,13 @@
             }
 
 
-            /*
-             * Premium
-             */
+            /* -------------------------
+               PREMIUM
+               ------------------------- */
 
-            if (request === "premium") {
+            if (
+                request === "premium"
+            ) {
 
                 var tier =
                     card.getAttribute(
@@ -490,6 +560,10 @@
                 );
 
 
+            /* -------------------------
+               PRICE UNAVAILABLE
+               ------------------------- */
+
             if (price === null) {
 
                 if (slot) {
@@ -508,6 +582,10 @@
                 return;
             }
 
+
+            /* -------------------------
+               DISPLAY PRICE
+               ------------------------- */
 
             if (slot) {
 
@@ -535,7 +613,7 @@
 
 
     /* =====================================================
-       Custom Stars
+       CUSTOM STARS
        ===================================================== */
 
     function renderCustomStarsBox() {
@@ -569,6 +647,7 @@
             !output ||
             !card
         ) {
+
             return;
         }
 
@@ -651,7 +730,7 @@
 
 
     /* =====================================================
-       Custom Stars Input
+       CUSTOM STARS INPUT
        ===================================================== */
 
     document.addEventListener(
@@ -671,13 +750,17 @@
 
 
     /* =====================================================
-       Start
+       INITIALIZATION
        ===================================================== */
 
     function init() {
 
         fetchPrices();
 
+
+        /*
+         * هر 3 دقیقه قیمت جدید را بررسی می‌کند.
+         */
 
         setInterval(
             fetchPrices,
@@ -703,20 +786,22 @@
 
 
     /* =====================================================
-       Debug
+       DEBUG
        ===================================================== */
 
     window.__psychoPricing = {
 
-        fetchPrices: fetchPrices,
+        fetchPrices:
+            fetchPrices,
 
         get data() {
             return priceData;
         },
 
-        get deductions() {
-            return PREMIUM_DEDUCTION;
+        get coefficients() {
+            return PREMIUM_COEFFICIENTS;
         }
     };
+
 
 })();
