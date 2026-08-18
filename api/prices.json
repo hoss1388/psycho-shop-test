@@ -1,41 +1,20 @@
 {
-  "updatedAt": "2026-08-18T09:25:13.346Z",
+  "updatedAt": "2026-08-18T09:31:56.898Z",
   "source": "fragment-api.io",
-  "tonToToman": 247383,
-  "stars": {
-    "tonPerStar": 0.0105,
-    "packages": {
-      "50": {
-        "ton": 0.525,
-        "toman": 129876
-      },
-      "100": {
-        "ton": 1.05,
-        "toman": 259752
-      },
-      "500": {
-        "ton": 5.25,
-        "toman": 1298761
-      },
-      "1000": {
-        "ton": 10.5,
-        "toman": 2597522
-      }
-    }
-  },
+  "tonToToman": 246976,
   "premium": {
     "single": {
       "3m": {
         "ton": 10.5,
-        "toman": 2597522
+        "toman": 2593248
       },
       "6m": {
         "ton": 19.6,
-        "toman": 4848707
+        "toman": 4840730
       },
       "12m": {
         "ton": 35,
-        "toman": 8658405
+        "toman": 8644160
       }
     }
   }
