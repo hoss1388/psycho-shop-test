@@ -1,37 +1,42 @@
 {
-  "updatedAt": null,
-  "sources": {
-    "premium": "https://api.fragment-api.io/api/prices",
-    "premiumPriceList": "https://api.fragment-api.io/api/prices/list",
-    "tonToToman": "https://api.bitpin.org/api/v1/mkt/tickers/ (GRAM_IRT)"
-  },
-  "health": {
-    "status": "not_ready",
-    "lastSuccessfulUpdate": null,
-    "fragment": {
-      "status": "not_ready"
-    },
-    "tonToToman": {
-      "status": "not_ready",
-      "provider": "Bitpin",
-      "market": "GRAM_IRT",
-      "fetchedAt": null
-    }
-  },
-  "tonToToman": null,
+  "updatedAt": "2026-08-18T09:25:13.346Z",
+  "source": "fragment-api.io",
+  "tonToToman": 247383,
   "stars": {
-    "tonPerStar": null
+    "tonPerStar": 0.0105,
+    "packages": {
+      "50": {
+        "ton": 0.525,
+        "toman": 129876
+      },
+      "100": {
+        "ton": 1.05,
+        "toman": 259752
+      },
+      "500": {
+        "ton": 5.25,
+        "toman": 1298761
+      },
+      "1000": {
+        "ton": 10.5,
+        "toman": 2597522
+      }
+    }
   },
   "premium": {
     "single": {
-      "3m": null,
-      "6m": null,
-      "12m": null
-    },
-    "four": {
-      "3m": null,
-      "6m": null,
-      "12m": null
+      "3m": {
+        "ton": 10.5,
+        "toman": 2597522
+      },
+      "6m": {
+        "ton": 19.6,
+        "toman": 4848707
+      },
+      "12m": {
+        "ton": 35,
+        "toman": 8658405
+      }
     }
   }
 }
