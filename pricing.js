@@ -1,53 +1,51 @@
 /* =========================================================
-   Psycho Shop - Live Pricing Engine
-   -----------------------------------------------------------
+   Psycho Shop - Fragment Live Pricing Engine
+   ---------------------------------------------------------
    Premium:
-   - یک قیمت پایه از Fragment API / prices.json
-   - همان قیمت پایه برای تک‌بوست و چهار‌بوست
-   - فعلاً هیچ مبلغی کم نمی‌شود
-   - بعداً فقط PREMIUM_DEDUCTION ها را تغییر می‌دهیم
+   - Reads the common Premium base price from api/prices.json
+   - Supports prices stored as:
+       { ton: 10.5, toman: 2593248 }
+   - Same base price for Single Boost and Four Boost
+   - Separate deductions for Single/Four Boost
+   - Deductions are currently 0
 
    Stars:
-   - 13 و 21 قیمت ثابت
-   - سایر بسته‌ها از prices.json
+   - Keeps existing fixed prices for 13 and 21 Stars
+   - Other packages use the live data
    ========================================================= */
 
 (function () {
     "use strict";
 
-    console.log("pricing.js loaded");
+    console.log("[pricing] pricing.js loaded");
 
     var PRICE_ENDPOINT = "api/prices.json";
 
-    // قیمت‌ها هر 3 دقیقه دوباره خوانده می‌شوند
+    // Refresh every 3 minutes
     var REFRESH_MS = 3 * 60 * 1000;
 
-    // اگر قیمت بیشتر از 15 دقیقه قدیمی باشد، نمایش داده نمی‌شود
+    // Reject prices older than 15 minutes
     var MAX_PRICE_AGE_MS = 15 * 60 * 1000;
 
+
     /* =====================================================
-       PREMIUM PRICE ADJUSTMENT
+       PREMIUM DEDUCTIONS
        -----------------------------------------------------
-       فعلاً صفر است تا قیمت خام واقعی را روی سایت ببینیم.
+       These are intentionally 0 for now.
 
-       بعداً مثلاً:
+       Later, if you want for example:
 
-       single:
-       "3m": 300000
+       Single 3 months:
+       base - 300000
 
-       یعنی:
-       قیمت تک‌بوست 3 ماهه =
-       قیمت پایه - 300000
+       Four 3 months:
+       base - 700000
 
-       four:
-       "3m": 700000
-
-       یعنی:
-       قیمت چهاربوست 3 ماهه =
-       قیمت پایه - 700000
+       simply change the numbers below.
        ===================================================== */
 
     var PREMIUM_DEDUCTION = {
+
         single: {
             "3m": 0,
             "6m": 0,
@@ -61,8 +59,9 @@
         }
     };
 
+
     /* =====================================================
-       STARS
+       STARS SETTINGS
        ===================================================== */
 
     var MARGIN_STARS = 47000;
@@ -72,30 +71,51 @@
         21: 165000
     };
 
-    var priceData = null;
-    var listeners = [];
 
     /* =====================================================
-       ابزارها
+       INTERNAL STATE
+       ===================================================== */
+
+    var priceData = null;
+
+    var listeners = [];
+
+
+    /* =====================================================
+       HELPERS
        ===================================================== */
 
     function roundTo(n, step) {
+
         step = step || 1000;
+
         return Math.ceil(n / step) * step;
     }
 
+
     function toFiniteNumber(value) {
-        var numeric =
-            typeof value === "string"
-                ? Number(value.replace(/,/g, ""))
-                : Number(value);
+
+        var numeric;
+
+        if (typeof value === "string") {
+
+            numeric = Number(
+                value.replace(/,/g, "")
+            );
+
+        } else {
+
+            numeric = Number(value);
+        }
 
         return Number.isFinite(numeric) && numeric > 0
             ? numeric
             : null;
     }
 
+
     function fmt(n) {
+
         n = Math.round(n || 0);
 
         return n
@@ -103,8 +123,9 @@
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+
     /* =====================================================
-       بررسی سالم بودن prices.json
+       PREMIUM DATA VALIDATION
        ===================================================== */
 
     function isFreshPremiumPayload(data) {
@@ -112,129 +133,200 @@
         if (
             !data ||
             !data.premium ||
+            !data.premium.single ||
             !data.updatedAt ||
             !data.tonToToman
         ) {
+
             return false;
         }
 
-        var updatedAt = Date.parse(data.updatedAt);
 
-        var age = Date.now() - updatedAt;
+        var updatedAt = Date.parse(
+            data.updatedAt
+        );
+
+        var age =
+            Date.now() - updatedAt;
+
 
         if (
             !Number.isFinite(updatedAt) ||
             age < -60000 ||
             age > MAX_PRICE_AGE_MS
         ) {
+
             return false;
         }
 
-        if (toFiniteNumber(data.tonToToman) === null) {
-            return false;
-        }
-
-        /*
-         * prices.json فعلی شما ممکن است فقط premium.single
-         * داشته باشد.
-         *
-         * بنابراین فعلاً فقط single را لازم می‌دانیم.
-         * برای چهاربوست در صورت نبودن four،
-         * از single استفاده می‌کنیم.
-         */
 
         if (
-            !data.premium.single ||
-            !["3m", "6m", "12m"].every(function (plan) {
-                return (
-                    toFiniteNumber(
-                        data.premium.single[plan]
-                    ) !== null
-                );
-            })
+            toFiniteNumber(
+                data.tonToToman
+            ) === null
         ) {
+
             return false;
         }
 
-        return true;
+
+        /*
+         * Current prices.json format:
+
+         premium.single["3m"] = {
+             ton: 10.5,
+             toman: 2593248
+         }
+
+         We accept both:
+
+         1. Object format:
+            { ton: 10.5, toman: 2593248 }
+
+         2. Number format:
+            10.5
+        */
+
+        var validPlans =
+            ["3m", "6m", "12m"];
+
+
+        return validPlans.every(
+            function (plan) {
+
+                var value =
+                    data.premium.single[plan];
+
+                if (
+                    value &&
+                    typeof value === "object"
+                ) {
+
+                    return (
+                        toFiniteNumber(
+                            value.toman
+                        ) !== null ||
+                        toFiniteNumber(
+                            value.ton
+                        ) !== null
+                    );
+                }
+
+
+                return (
+                    toFiniteNumber(value) !== null
+                );
+            }
+        );
     }
 
+
     /* =====================================================
-       دریافت prices.json
+       FETCH PRICES
        ===================================================== */
 
     function fetchPrices() {
 
+        console.log(
+            "[pricing] Fetching:",
+            PRICE_ENDPOINT
+        );
+
+
         return fetch(
-            PRICE_ENDPOINT + "?_=" + Date.now(),
+            PRICE_ENDPOINT +
+            "?_=" +
+            Date.now(),
             {
                 cache: "no-store"
             }
         )
 
-            .then(function (res) {
+        .then(function (res) {
 
-                if (!res.ok) {
-                    throw new Error(
-                        "HTTP " + res.status
-                    );
-                }
+            if (!res.ok) {
 
-                return res.json();
-            })
-
-            .then(function (data) {
-
-                if (!isFreshPremiumPayload(data)) {
-
-                    throw new Error(
-                        "قیمت Premium در prices.json نامعتبر یا قدیمی است"
-                    );
-                }
-
-                priceData = data;
-
-                notify();
-
-                return data;
-            })
-
-            .catch(function (err) {
-
-                console.warn(
-                    "[pricing] قیمت آنلاین Premium در دسترس نیست:",
-                    err
+                throw new Error(
+                    "HTTP " + res.status
                 );
+            }
 
-                /*
-                 * قیمت قبلی را پاک نمی‌کنیم.
-                 * اگر قبلاً قیمت معتبر داشتیم،
-                 * تا دریافت موفق بعدی نگه داشته می‌شود.
-                 */
+            return res.json();
+        })
 
-                notify();
-            });
+        .then(function (data) {
+
+            if (
+                !isFreshPremiumPayload(data)
+            ) {
+
+                throw new Error(
+                    "prices.json is invalid or outdated"
+                );
+            }
+
+
+            priceData = data;
+
+
+            console.log(
+                "[pricing] Live prices loaded:",
+                priceData
+            );
+
+
+            notify();
+
+
+            return data;
+        })
+
+        .catch(function (err) {
+
+            /*
+             * Do NOT destroy previously loaded
+             * valid data if a temporary network
+             * error happens.
+             */
+
+            console.warn(
+                "[pricing] Live prices unavailable:",
+                err
+            );
+
+
+            notify();
+        });
     }
 
+
     /* =====================================================
-       Listener
+       NOTIFY
        ===================================================== */
 
     function notify() {
 
-        listeners.forEach(function (fn) {
+        listeners.forEach(
+            function (fn) {
 
-            try {
-                fn(priceData);
-            } catch (e) {
-                console.error(e);
+                try {
+
+                    fn(priceData);
+
+                } catch (e) {
+
+                    console.error(
+                        "[pricing] Listener error:",
+                        e
+                    );
+                }
             }
-
-        });
+        );
     }
 
+
     /* =====================================================
-       STARS
+       STARS RAW PRICE
        ===================================================== */
 
     function starsRawToman(qty) {
@@ -243,25 +335,31 @@
             !priceData ||
             !priceData.stars
         ) {
+
             return null;
         }
+
 
         var tonPerStar =
             toFiniteNumber(
                 priceData.stars.tonPerStar
             );
 
+
         var tonToToman =
             toFiniteNumber(
                 priceData.tonToToman
             );
 
+
         if (
             tonPerStar === null ||
             tonToToman === null
         ) {
+
             return null;
         }
+
 
         return (
             tonPerStar *
@@ -270,47 +368,82 @@
         );
     }
 
-    window.psychoStarsPrice = function (qty) {
 
-        qty = parseInt(qty, 10);
+    /* =====================================================
+       STARS FINAL PRICE
+       ===================================================== */
 
-        if (!qty || qty <= 0) {
-            return null;
-        }
+    window.psychoStarsPrice =
+        function (qty) {
 
-        /*
-         * قیمت ثابت 13 و 21
-         */
+            qty = parseInt(
+                qty,
+                10
+            );
 
-        if (
-            Object.prototype.hasOwnProperty.call(
-                FIXED_STARS,
-                qty
-            )
-        ) {
-            return FIXED_STARS[qty];
-        }
 
-        var raw = starsRawToman(qty);
+            if (
+                !qty ||
+                qty <= 0
+            ) {
 
-        if (raw === null) {
-            return null;
-        }
+                return null;
+            }
 
-        return (
-            roundTo(raw, 500) +
-            MARGIN_STARS
-        );
-    };
+
+            /*
+             * Fixed Stars prices
+             */
+
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    FIXED_STARS,
+                    qty
+                )
+            ) {
+
+                return FIXED_STARS[qty];
+            }
+
+
+            var raw =
+                starsRawToman(qty);
+
+
+            if (raw === null) {
+
+                return null;
+            }
+
+
+            return (
+                roundTo(
+                    raw,
+                    500
+                ) +
+                MARGIN_STARS
+            );
+        };
+
 
     /* =====================================================
        PREMIUM BASE PRICE
        -----------------------------------------------------
-       قیمت پایه Premium فقط از single گرفته می‌شود.
+       IMPORTANT:
 
-       اگر چهاربوست در prices.json وجود داشته باشد،
-       باز هم فعلاً از single استفاده می‌کنیم تا قیمت پایه
-       برای هر دو بخش یکسان باشد.
+       We intentionally use the SAME base price
+       for Single Boost and Four Boost.
+
+       If prices.json contains:
+
+       {
+         "ton": 10.5,
+         "toman": 2593248
+       }
+
+       we use the "toman" value directly.
+
+       This avoids converting TON a second time.
        ===================================================== */
 
     function premiumBaseToman(plan) {
@@ -320,119 +453,235 @@
             !priceData.premium ||
             !priceData.premium.single
         ) {
+
             return null;
         }
 
-        var ton =
-            toFiniteNumber(
-                priceData.premium.single[plan]
-            );
 
-        var tonToToman =
+        var value =
+            priceData
+                .premium
+                .single[plan];
+
+
+        if (!value) {
+
+            return null;
+        }
+
+
+        /*
+         * Current format:
+         *
+         * {
+         *   ton: 10.5,
+         *   toman: 2593248
+         * }
+         *
+         * Prefer the already calculated
+         * toman value.
+         */
+
+        if (
+            typeof value === "object"
+        ) {
+
+            var toman =
+                toFiniteNumber(
+                    value.toman
+                );
+
+
+            if (toman !== null) {
+
+                return toman;
+            }
+
+
+            /*
+             * Fallback:
+             * If toman is missing but TON exists,
+             * calculate it using the current TON rate.
+             */
+
+            var ton =
+                toFiniteNumber(
+                    value.ton
+                );
+
+
+            var tonToToman =
+                toFiniteNumber(
+                    priceData.tonToToman
+                );
+
+
+            if (
+                ton !== null &&
+                tonToToman !== null
+            ) {
+
+                return (
+                    ton *
+                    tonToToman
+                );
+            }
+
+
+            return null;
+        }
+
+
+        /*
+         * Compatibility with old format where
+         * the value itself was TON.
+         */
+
+        var numericTon =
+            toFiniteNumber(value);
+
+
+        var rate =
             toFiniteNumber(
                 priceData.tonToToman
             );
 
+
         if (
-            ton === null ||
-            tonToToman === null
+            numericTon === null ||
+            rate === null
         ) {
+
             return null;
         }
 
-        return ton * tonToToman;
+
+        return (
+            numericTon *
+            rate
+        );
     }
+
 
     /* =====================================================
        PREMIUM FINAL PRICE
        -----------------------------------------------------
        tier:
-         single = تک‌بوست
-         four   = چهار‌بوست
+         single = Single Boost
+         four   = Four Boost
 
        plan:
          3m
          6m
          12m
 
-       فرمول:
+       Formula:
 
-       قیمت پایه = قیمت Fragment
-
-       قیمت نهایی =
-       قیمت پایه - مبلغ کسر مربوط به tier و plan
+         Base Price
+           -
+         Tier Deduction
+           =
+         Final Price
        ===================================================== */
 
-    window.psychoPremiumPrice = function (
-        tier,
-        plan
-    ) {
-
-        var base = premiumBaseToman(plan);
-
-        if (base === null) {
-            return null;
-        }
-
-        /*
-         * اگر tier ناشناخته بود، تک‌بوست در نظر گرفته می‌شود.
-         */
-
-        if (
-            tier !== "single" &&
-            tier !== "four"
+    window.psychoPremiumPrice =
+        function (
+            tier,
+            plan
         ) {
-            tier = "single";
-        }
 
-        var deduction = 0;
+            /*
+             * Make sure tier is valid.
+             */
 
-        if (
-            PREMIUM_DEDUCTION[tier] &&
-            Object.prototype.hasOwnProperty.call(
-                PREMIUM_DEDUCTION[tier],
-                plan
-            )
-        ) {
-            deduction =
-                Number(
-                    PREMIUM_DEDUCTION[tier][plan]
-                ) || 0;
-        }
+            if (
+                tier !== "single" &&
+                tier !== "four"
+            ) {
 
-        /*
-         * قیمت خام را به نزدیک‌ترین 1000 تومان
-         * گرد می‌کنیم.
-         */
+                tier = "single";
+            }
 
-        var roundedBase =
-            roundTo(base, 1000);
 
-        /*
-         * فعلاً deduction = 0
-         *
-         * بعداً فقط deduction را تغییر می‌دهیم.
-         */
+            /*
+             * Get common Premium base price.
+             */
 
-        var finalPrice =
-            roundedBase - deduction;
+            var base =
+                premiumBaseToman(
+                    plan
+                );
 
-        /*
-         * اجازه نمی‌دهیم قیمت منفی یا صفر شود.
-         */
 
-        if (
-            !Number.isFinite(finalPrice) ||
-            finalPrice <= 0
-        ) {
-            return null;
-        }
+            if (base === null) {
 
-        return finalPrice;
-    };
+                return null;
+            }
+
+
+            /*
+             * Get deduction.
+             */
+
+            var deduction = 0;
+
+
+            if (
+                PREMIUM_DEDUCTION[tier] &&
+                Object.prototype.hasOwnProperty.call(
+                    PREMIUM_DEDUCTION[tier],
+                    plan
+                )
+            ) {
+
+                deduction =
+                    Number(
+                        PREMIUM_DEDUCTION[tier][plan]
+                    ) || 0;
+            }
+
+
+            /*
+             * Round the common base price.
+             */
+
+            var roundedBase =
+                roundTo(
+                    base,
+                    1000
+                );
+
+
+            /*
+             * Apply deduction.
+             */
+
+            var finalPrice =
+                roundedBase -
+                deduction;
+
+
+            /*
+             * Never allow zero/negative price.
+             */
+
+            if (
+                !Number.isFinite(
+                    finalPrice
+                ) ||
+                finalPrice <= 0
+            ) {
+
+                return null;
+            }
+
+
+            return finalPrice;
+        };
+
 
     /* =====================================================
-       RENDER CARDS
+       RENDER SERVICE CARDS
        ===================================================== */
 
     function renderCards() {
@@ -443,67 +692,101 @@
                 ".service-card[data-request='premium'][data-premium-tier]"
             );
 
-        cards.forEach(function (card) {
 
-            var price = null;
+        cards.forEach(
+            function (card) {
 
-            var request =
-                card.getAttribute(
-                    "data-request"
-                );
+                var price = null;
 
-            if (request === "stars") {
 
-                var qty =
-                    parseInt(
-                        card.getAttribute(
-                            "data-stars-qty"
-                        ),
-                        10
-                    );
-
-                price =
-                    window.psychoStarsPrice(
-                        qty
-                    );
-
-            } else {
-
-                var tier =
+                var request =
                     card.getAttribute(
-                        "data-premium-tier"
+                        "data-request"
                     );
 
-                var plan =
-                    card.getAttribute(
-                        "data-premium-plan"
-                    );
 
-                price =
-                    window.psychoPremiumPrice(
-                        tier,
-                        plan
-                    );
-            }
+                /* -------------------------
+                   STARS
+                   ------------------------- */
 
-            var slot =
-                card.querySelector(
-                    "[data-price-slot]"
-                );
+                if (
+                    request === "stars"
+                ) {
 
-            if (price === null) {
+                    var qty =
+                        parseInt(
+                            card.getAttribute(
+                                "data-stars-qty"
+                            ),
+                            10
+                        );
 
-                if (slot) {
-                    slot.textContent =
-                        "قیمت آنلاین موقتاً در دسترس نیست";
+
+                    price =
+                        window.psychoStarsPrice(
+                            qty
+                        );
                 }
 
-                card.setAttribute(
-                    "data-price",
-                    ""
-                );
 
-            } else {
+                /* -------------------------
+                   PREMIUM
+                   ------------------------- */
+
+                else {
+
+                    var tier =
+                        card.getAttribute(
+                            "data-premium-tier"
+                        );
+
+
+                    var plan =
+                        card.getAttribute(
+                            "data-premium-plan"
+                        );
+
+
+                    price =
+                        window.psychoPremiumPrice(
+                            tier,
+                            plan
+                        );
+                }
+
+
+                var slot =
+                    card.querySelector(
+                        "[data-price-slot]"
+                    );
+
+
+                /* -------------------------
+                   PRICE UNAVAILABLE
+                   ------------------------- */
+
+                if (price === null) {
+
+                    if (slot) {
+
+                        slot.textContent =
+                            "قیمت آنلاین موقتاً در دسترس نیست";
+                    }
+
+
+                    card.setAttribute(
+                        "data-price",
+                        ""
+                    );
+
+
+                    return;
+                }
+
+
+                /* -------------------------
+                   DISPLAY PRICE
+                   ------------------------- */
 
                 if (slot) {
 
@@ -512,23 +795,33 @@
                         " تومان";
                 }
 
+
+                /*
+                 * IMPORTANT:
+                 * script.js can read this
+                 * when adding product to cart.
+                 */
+
                 card.setAttribute(
                     "data-price",
                     price
                 );
+
 
                 card.setAttribute(
                     "data-unit",
                     "1"
                 );
             }
-        });
+        );
+
 
         renderCustomStarsBox();
     }
 
+
     /* =====================================================
-       CUSTOM STARS
+       CUSTOM STARS BOX
        ===================================================== */
 
     function renderCustomStarsBox() {
@@ -538,28 +831,34 @@
                 "starsCustomQty"
             );
 
+
         var out =
             document.getElementById(
                 "starsCustomPriceOut"
             );
+
 
         var card =
             document.getElementById(
                 "starsCustomCard"
             );
 
+
         var label =
             document.getElementById(
                 "starsCustomQtyLabel"
             );
+
 
         if (
             !input ||
             !out ||
             !card
         ) {
+
             return;
         }
+
 
         var qty =
             parseInt(
@@ -567,18 +866,25 @@
                 10
             );
 
-        if (!qty || qty <= 0) {
+
+        if (
+            !qty ||
+            qty <= 0
+        ) {
 
             out.textContent =
                 "تعداد استار را وارد کنید";
+
 
             card.setAttribute(
                 "data-price",
                 ""
             );
 
+
             return;
         }
+
 
         if (label) {
 
@@ -588,43 +894,51 @@
                 " استار)";
         }
 
+
         var price =
             window.psychoStarsPrice(
                 qty
             );
+
 
         if (price === null) {
 
             out.textContent =
                 "در حال دریافت قیمت آنی...";
 
+
             card.setAttribute(
                 "data-price",
                 ""
             );
 
-        } else {
 
-            out.textContent =
-                fmt(qty) +
-                " استار = " +
-                fmt(price) +
-                " تومان";
-
-            card.setAttribute(
-                "data-price",
-                price
-            );
-
-            card.setAttribute(
-                "data-unit",
-                "1"
-            );
+            return;
         }
+
+
+        out.textContent =
+            fmt(qty) +
+            " استار = " +
+            fmt(price) +
+            " تومان";
+
+
+        card.setAttribute(
+            "data-price",
+            price
+        );
+
+
+        card.setAttribute(
+            "data-unit",
+            "1"
+        );
     }
 
+
     /* =====================================================
-       تغییر تعداد Custom Stars
+       CUSTOM STARS INPUT
        ===================================================== */
 
     document.addEventListener(
@@ -636,32 +950,37 @@
                 e.target.id ===
                     "starsCustomQty"
             ) {
+
                 renderCustomStarsBox();
             }
         }
     );
 
+
     /* =====================================================
-       Listener اصلی
+       REGISTER RENDER LISTENER
        ===================================================== */
 
     listeners.push(
         renderCards
     );
 
+
     /* =====================================================
-       INIT
+       INITIALIZATION
        ===================================================== */
 
     function init() {
 
         fetchPrices();
 
+
         setInterval(
             fetchPrices,
             REFRESH_MS
         );
     }
+
 
     if (
         document.readyState ===
@@ -678,13 +997,15 @@
         init();
     }
 
+
     /* =====================================================
-       DEBUG
+       DEBUG API
        ===================================================== */
 
     window.__psychoPricing = {
 
-        fetchPrices: fetchPrices,
+        fetchPrices:
+            fetchPrices,
 
         get data() {
             return priceData;
@@ -692,7 +1013,18 @@
 
         get premiumDeductions() {
             return PREMIUM_DEDUCTION;
+        },
+
+        get premiumBase() {
+
+            return function (plan) {
+
+                return premiumBaseToman(
+                    plan
+                );
+            };
         }
     };
+
 
 })();
