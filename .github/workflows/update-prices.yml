@@ -1,4 +1,4 @@
-name: Update Live Premium Prices
+name: Update Premium Prices
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-live-premium-prices
+  group: update-premium-prices
   cancel-in-progress: false
 
 jobs:
@@ -19,131 +19,119 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Validate Fragment API key
+      - name: Check Fragment API key
         env:
           FRAGMENT_API_KEY: ${{ secrets.FRAGMENT_API_KEY }}
         run: |
-          test -n "$FRAGMENT_API_KEY" || (
+          if [ -z "$FRAGMENT_API_KEY" ]; then
             echo "FRAGMENT_API_KEY is missing"
             exit 1
-          )
+          fi
 
-      - name: Fetch live Premium quotes
+      - name: Get Fragment price list
         env:
           FRAGMENT_API_KEY: ${{ secrets.FRAGMENT_API_KEY }}
         run: |
-          set -e
+          curl -fsS \
+            --max-time 30 \
+            -H "Accept: application/json" \
+            -H "X-API-Key: $FRAGMENT_API_KEY" \
+            "https://api.fragment-api.io/api/prices/list" \
+            -o /tmp/fragment-prices.json
 
-          get_premium() {
-            MONTHS="$1"
+          echo "Fragment API response:"
+          cat /tmp/fragment-prices.json
 
-            echo "Requesting Premium: ${MONTHS} months"
-
-            curl -fsS \
-              --max-time 30 \
-              -H "Accept: application/json" \
-              -H "X-API-Key: $FRAGMENT_API_KEY" \
-              "https://api.fragment-api.io/api/prices?product_type=premium&quantity=${MONTHS}&recipient=durov&payment_method=ton" \
-              -o "/tmp/premium-${MONTHS}.json"
-
-            echo "Response for ${MONTHS} months:"
-            cat "/tmp/premium-${MONTHS}.json"
-            echo
-          }
-
-          get_premium 3
-          get_premium 6
-          get_premium 12
-
-      - name: Fetch TON price
+      - name: Get TON price
         run: |
           curl -fsS \
             --max-time 30 \
             "https://api.bitpin.org/api/v1/mkt/tickers/" \
-            -o /tmp/bitpin-tickers.json
+            -o /tmp/bitpin.json
 
-          TON_PRICE=$(node scripts/read-ton-price.cjs /tmp/bitpin-tickers.json)
+          TON_PRICE=$(node scripts/read-ton-price.cjs /tmp/bitpin.json)
 
-          test -n "$TON_PRICE" || (
-            echo "TON price could not be determined"
+          if [ -z "$TON_PRICE" ]; then
+            echo "TON price not found"
             exit 1
-          )
+          fi
 
           echo "TON_PRICE=$TON_PRICE" >> "$GITHUB_ENV"
-          echo "TON price: $TON_PRICE"
 
-      - name: Generate Premium prices.json
+      - name: Create prices.json
         env:
+          FRAGMENT_FILE: /tmp/fragment-prices.json
           TON_PRICE: ${{ env.TON_PRICE }}
         run: |
           node <<'NODE'
           const fs = require("fs");
 
+          const data = JSON.parse(
+            fs.readFileSync(process.env.FRAGMENT_FILE, "utf8")
+          );
+
           const tonToToman = Number(process.env.TON_PRICE);
 
           if (!Number.isFinite(tonToToman) || tonToToman <= 0) {
-            throw new Error("Invalid TON price: " + process.env.TON_PRICE);
+            throw new Error("Invalid TON price");
           }
 
-          function readQuote(months) {
-            const file = `/tmp/premium-${months}.json`;
+          function getPremium(months) {
+            const name = `${months} months Telegram Premium`;
 
-            const data = JSON.parse(
-              fs.readFileSync(file, "utf8")
+            const item = data.find(x =>
+              x.product_type === "premium" &&
+              x.item_name === name &&
+              x.payment_method === "ton"
             );
 
-            if (
-              !data ||
-              typeof data.total !== "number" ||
-              data.total <= 0
-            ) {
+            if (!item) {
               throw new Error(
-                `Invalid Premium quote for ${months} months`
+                `Premium price not found: ${name}`
               );
             }
 
-            return data;
+            return Number(item.total);
           }
 
-          const q3 = readQuote(3);
-          const q6 = readQuote(6);
-          const q12 = readQuote(12);
+          const p3 = getPremium(3);
+          const p6 = getPremium(6);
+          const p12 = getPremium(12);
 
-          function toman(ton) {
-            return Math.round(ton * tonToToman);
-          }
+          const toman = ton =>
+            Math.round(ton * tonToToman);
 
           const result = {
             updatedAt: new Date().toISOString(),
 
-            source: "fragment-api.io/live",
+            source: "fragment-api.io",
 
             tonToToman,
 
             premium: {
               single: {
                 "3m": {
-                  ton: q3.total,
-                  toman: toman(q3.total)
+                  ton: p3,
+                  toman: toman(p3)
                 },
 
                 "6m": {
-                  ton: q6.total,
-                  toman: toman(q6.total)
+                  ton: p6,
+                  toman: toman(p6)
                 },
 
                 "12m": {
-                  ton: q12.total,
-                  toman: toman(q12.total)
+                  ton: p12,
+                  toman: toman(p12)
                 }
               }
             }
           };
 
-          fs.mkdirSync("api", { recursive: true });
+          fs.mkdirSync("api", {
+            recursive: true
+          });
 
           fs.writeFileSync(
             "api/prices.json",
@@ -151,43 +139,29 @@ jobs:
           );
 
           console.log(
-            "Generated api/prices.json:"
-          );
-
-          console.log(
             JSON.stringify(result, null, 2)
           );
           NODE
 
-      - name: Validate generated prices
+      - name: Validate prices.json
         run: |
           test -s api/prices.json
 
-          node <<'NODE'
-          const p = require("./api/prices.json");
+          node -e '
+            const p = require("./api/prices.json");
 
-          if (!p.premium) {
-            throw new Error("Premium section missing");
-          }
-
-          for (const month of ["3m", "6m", "12m"]) {
-            const item = p.premium.single[month];
-
-            if (
-              !item ||
-              typeof item.ton !== "number" ||
-              typeof item.toman !== "number"
-            ) {
-              throw new Error(
-                `Invalid Premium price: ${month}`
-              );
+            if (!p.premium ||
+                !p.premium.single ||
+                !p.premium.single["3m"] ||
+                !p.premium.single["6m"] ||
+                !p.premium.single["12m"]) {
+              throw new Error("Premium prices are invalid");
             }
-          }
 
-          console.log("Premium prices are valid.");
-          NODE
+            console.log("prices.json OK");
+          '
 
-      - name: Commit updated prices
+      - name: Commit prices
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -195,8 +169,8 @@ jobs:
           git add api/prices.json
 
           if git diff --cached --quiet; then
-            echo "No price changes."
+            echo "No changes"
           else
-            git commit -m "chore(pricing): update live Premium prices"
+            git commit -m "chore(pricing): update premium prices"
             git push
           fi
