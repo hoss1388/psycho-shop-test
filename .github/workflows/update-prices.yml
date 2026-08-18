@@ -1,13 +1,7 @@
-name: Update Live Premium Prices
+name: Update Live Prices
 
 on:
   workflow_dispatch:
-    inputs:
-      dry_run:
-        description: "Validate live Fragment and Bitpin data without committing prices.json"
-        required: false
-        default: false
-        type: boolean
   schedule:
     - cron: "*/5 * * * *"
 
@@ -15,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-live-premium-prices
+  group: update-live-prices
   cancel-in-progress: false
 
 jobs:
@@ -28,48 +22,172 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate required secret
+      - name: Validate Fragment API key
         env:
           FRAGMENT_API_KEY: ${{ secrets.FRAGMENT_API_KEY }}
         run: |
-          test -n "$FRAGMENT_API_KEY" || (echo "FRAGMENT_API_KEY is missing" && exit 1)
+          if [ -z "$FRAGMENT_API_KEY" ]; then
+            echo "FRAGMENT_API_KEY is missing"
+            exit 1
+          fi
 
-      - name: Fetch current Fragment price list
+      - name: Fetch Fragment prices
         env:
           FRAGMENT_API_KEY: ${{ secrets.FRAGMENT_API_KEY }}
         run: |
           curl -fsS --max-time 30 \
+            -H "Accept: application/json" \
             -H "X-API-Key: $FRAGMENT_API_KEY" \
             "https://api.fragment-api.io/api/prices/list" \
             -o /tmp/fragment-prices.json
 
-      - name: Fetch current TON to toman rate
+          echo "Fragment prices received:"
+          cat /tmp/fragment-prices.json
+
+      - name: Fetch TON price from Bitpin
         run: |
           curl -fsS --max-time 30 \
             "https://api.bitpin.org/api/v1/mkt/tickers/" \
             -o /tmp/bitpin-tickers.json
 
           TON_PRICE=$(node scripts/read-ton-price.cjs /tmp/bitpin-tickers.json)
+
+          if [ -z "$TON_PRICE" ]; then
+            echo "Could not determine TON price"
+            exit 1
+          fi
+
           echo "TON_PRICE=$TON_PRICE" >> "$GITHUB_ENV"
+          echo "TON_PRICE=$TON_PRICE"
 
-      - name: Fetch and convert current Premium quotes
+      - name: Generate prices.json
         env:
-          FRAGMENT_API_KEY: ${{ secrets.FRAGMENT_API_KEY }}
           FRAGMENT_PRICES_FILE: /tmp/fragment-prices.json
+          TON_PRICE: ${{ env.TON_PRICE }}
         run: |
-          node scripts/convert-prices.cjs
+          node <<'NODE'
+          const fs = require("fs");
 
-      - name: Validate generated prices and health
+          const fragmentFile = process.env.FRAGMENT_PRICES_FILE;
+          const tonToToman = Number(process.env.TON_PRICE);
+
+          if (!Number.isFinite(tonToToman) || tonToToman <= 0) {
+            throw new Error("Invalid TON_PRICE: " + process.env.TON_PRICE);
+          }
+
+          const data = JSON.parse(fs.readFileSync(fragmentFile, "utf8"));
+
+          if (!Array.isArray(data)) {
+            throw new Error("Fragment price list is not an array");
+          }
+
+          function findPrice(productType, quantity) {
+            const item = data.find(x =>
+              x.product_type === productType &&
+              x.payment_method === "ton" &&
+              Number(x.item_name.match(/\d+/)?.[0]) === quantity
+            );
+
+            if (!item) {
+              throw new Error(
+                `Missing Fragment price: ${productType} ${quantity}`
+              );
+            }
+
+            return Number(item.total);
+          }
+
+          const stars = {
+            "50": findPrice("stars", 50),
+            "100": findPrice("stars", 100),
+            "500": findPrice("stars", 500),
+            "1000": findPrice("stars", 1000)
+          };
+
+          const premium = {
+            single: {
+              "3m": findPrice("premium", 3),
+              "6m": findPrice("premium", 6),
+              "12m": findPrice("premium", 12)
+            }
+          };
+
+          function toman(ton) {
+            return Math.round(ton * tonToToman);
+          }
+
+          const result = {
+            updatedAt: new Date().toISOString(),
+            source: "fragment-api.io",
+            tonToToman,
+            stars: {
+              tonPerStar: stars["50"] / 50,
+              packages: {
+                "50": {
+                  ton: stars["50"],
+                  toman: toman(stars["50"])
+                },
+                "100": {
+                  ton: stars["100"],
+                  toman: toman(stars["100"])
+                },
+                "500": {
+                  ton: stars["500"],
+                  toman: toman(stars["500"])
+                },
+                "1000": {
+                  ton: stars["1000"],
+                  toman: toman(stars["1000"])
+                }
+              }
+            },
+            premium: {
+              single: {
+                "3m": {
+                  ton: premium.single["3m"],
+                  toman: toman(premium.single["3m"])
+                },
+                "6m": {
+                  ton: premium.single["6m"],
+                  toman: toman(premium.single["6m"])
+                },
+                "12m": {
+                  ton: premium.single["12m"],
+                  toman: toman(premium.single["12m"])
+                }
+              }
+            }
+          };
+
+          fs.mkdirSync("api", { recursive: true });
+          fs.writeFileSync(
+            "api/prices.json",
+            JSON.stringify(result, null, 2) + "\n"
+          );
+
+          console.log("Generated api/prices.json:");
+          console.log(JSON.stringify(result, null, 2));
+          NODE
+
+      - name: Validate prices.json
         run: |
-          MAX_PRICE_AGE_SECONDS=900 node scripts/validate-prices.cjs api/prices.json
+          test -s api/prices.json
+          node -e '
+            const p = require("./api/prices.json");
+            if (!p.tonToToman || !p.stars || !p.premium) process.exit(1);
+            console.log("prices.json is valid");
+          '
 
-      - name: Commit fresh price data
-        if: ${{ inputs.dry_run != true }}
+      - name: Commit updated prices
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add api/prices.json
-          git diff --cached --quiet || (
-            git commit -m "chore(pricing): refresh live Fragment Premium quotes"
+
+          if git diff --cached --quiet; then
+            echo "No price changes"
+          else
+            git commit -m "chore(pricing): update live prices"
             git push
-          )
+          fi
