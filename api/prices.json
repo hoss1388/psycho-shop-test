@@ -1,20 +1,20 @@
 {
-  "updatedAt": "2026-09-03T00:17:38.194Z",
+  "updatedAt": "2026-09-05T00:16:54.102Z",
   "source": "fragment-api.io",
-  "tonToToman": 290380,
+  "tonToToman": 304691,
   "premium": {
     "single": {
       "3m": {
         "ton": 10.5,
-        "toman": 3048990
+        "toman": 3199256
       },
       "6m": {
         "ton": 19.6,
-        "toman": 5691448
+        "toman": 5971944
       },
       "12m": {
         "ton": 35,
-        "toman": 10163300
+        "toman": 10664185
       }
     }
   }
